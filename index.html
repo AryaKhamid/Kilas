@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KILAS SMANERA - Ruang Aspirasi Transparan Sekolah</title>
+    <title>KILAS SMANERA - Kanal Informasi & Layanan Aspirasi Siswa SMANERA</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -60,13 +64,6 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .glass-card-yellow {
-            background: rgba(245, 158, 11, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-
         .glass-nav {
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
@@ -98,8 +95,8 @@
         #floatingContainer {
             position: relative;
             width: 100%;
-            height: calc(100vh - 140px);
-            min-height: 550px;
+            height: calc(100vh - 180px);
+            min-height: 520px;
             overflow: hidden;
         }
 
@@ -119,12 +116,6 @@
 
         .gradient-text-yellow {
             background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gradient-text-blue {
-            background: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -152,7 +143,7 @@
             <!-- Stats Ribbon -->
             <div class="hidden md:flex items-center space-x-6 text-xs bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700/60">
                 <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="syncIndicator" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" title="Tersambung ke Cloud Database Real-time"></span>
                     <span class="text-slate-400">Total Aspirasi:</span>
                     <span id="statTotal" class="font-bold text-amber-400">0</span>
                 </div>
@@ -247,12 +238,12 @@
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
             </span>
-            <span>Aspirasi melayang secara real-time! <strong>Geser / Klik</strong> kartu untuk detail.</span>
+            <span>Aspirasi terhubung secara <strong>Real-time Cloud</strong>! Geser / Klik kartu untuk detail.</span>
         </div>
 
         <!-- 1. FLOATING SKY VIEW CONTAINER -->
         <div id="floatingContainer" class="rounded-3xl border border-blue-900/40 bg-gradient-to-b from-slate-900/80 via-blue-950/20 to-slate-900/90 backdrop-blur-sm relative shadow-2xl">
-            <!-- Canvas physics animations render inside this via JavaScript dynamic elements -->
+            <!-- Canvas physics cards render inside this dynamically -->
         </div>
 
         <!-- 2. GRID LIST VIEW CONTAINER (Hidden by default) -->
@@ -267,7 +258,7 @@
                     <i class="fa-solid fa-wind"></i>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-1">Belum Ada Aspirasi di Kategori Ini</h3>
-                <p class="text-slate-400 text-xs max-w-sm">Jadilah siswa pertama yang memberikan saran dan ide terbaikmu untuk sekolah!</p>
+                <p class="text-slate-400 text-xs max-w-sm">Jadilah siswa pertama yang memberikan saran dan ide terbaikmu untuk SMANERA!</p>
                 <button onclick="openModal()" class="mt-4 px-4 py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400 transition">
                     + Sampaikan Aspirasi
                 </button>
@@ -275,13 +266,12 @@
         </div>
     </main>
 
+    <!-- Form Modal -->
     <div id="aspirationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-slate-900 border border-amber-500/30 w-full max-w-lg rounded-3xl p-6 shadow-2xl shadow-amber-500/10 transform scale-95 transition-all duration-300 relative overflow-hidden" id="modalContent">
             
-            <!-- Top Color Accent Line -->
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-amber-400 to-yellow-500"></div>
 
-            <!-- Modal Header -->
             <div class="flex items-center justify-between mb-5 pt-2">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
@@ -289,7 +279,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-white">Sampaikan Aspirasi Anda</h3>
-                        <p class="text-xs text-slate-400">Suaramu membantu membangun sekolah yang lebih baik</p>
+                        <p class="text-xs text-slate-400">Suaramu membantu membangun SMANERA lebih baik</p>
                     </div>
                 </div>
                 <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
@@ -306,7 +296,7 @@
                         <input type="text" id="inputName" maxlength="30" placeholder="Contoh: Budi S. / Anonim" class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amber-400 transition placeholder-slate-500">
                     </div>
                     
-                    <!-- Kelas -->
+                    <!-- Kelas Select -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">Kelas / Angkatan *</label>
                         <select id="inputGrade" required class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amber-400 transition">
@@ -352,7 +342,7 @@
                     </div>
                 </div>
 
-                <!-- Kategori -->
+                <!-- Kategori Radio -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Kategori Aspirasi *</label>
                     <div class="grid grid-cols-3 gap-2">
@@ -398,7 +388,7 @@
                     <textarea id="inputText" required maxlength="280" rows="4" oninput="updateCharCount()" placeholder="Tuliskan ide, masukan, atau kritik membangun dengan santun dan jelas..." class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl p-3 focus:outline-none focus:border-amber-400 transition placeholder-slate-500 resize-none"></textarea>
                 </div>
 
-                <!-- Card Theme Highlight color picker -->
+                <!-- Nuansa Kartu -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Pilih Nuansa Kartu Anda</label>
                     <div class="flex items-center space-x-3">
@@ -431,6 +421,7 @@
         </div>
     </div>
 
+    <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-slate-900 border border-blue-500/30 w-full max-w-md rounded-3xl p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-all" id="detailContent">
             <div id="detailAccentHeader" class="absolute top-0 left-0 right-0 h-2 bg-amber-500"></div>
@@ -441,7 +432,7 @@
                         Fasilitas
                     </span>
                     <h3 id="detailAuthor" class="font-bold text-white text-base">Nama Siswa</h3>
-                    <p id="detailGrade" class="text-xs text-slate-400">Kelas 11 IPA</p>
+                    <p id="detailGrade" class="text-xs text-slate-400">Kelas 11</p>
                 </div>
                 <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
                     <i class="fa-solid fa-xmark"></i>
@@ -460,11 +451,11 @@
                     <span id="detailTime">Baru saja</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="detailDeleteBtn" onclick="requestDeleteFromDetail()" class="hidden bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white font-bold px-3 py-2 rounded-xl border border-red-500/30 transition text-xs items-center gap-1">
+                    <button id="detailDeleteBtn" onclick="requestDeleteFromDetail()" class="hidden bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl border border-red-500/30 transition text-xs items-center gap-1.5 shadow">
                         <i class="fa-solid fa-trash-can"></i>
                         <span>Hapus</span>
                     </button>
-                    <button id="detailUpvoteBtn" onclick="upvoteCurrentDetail()" class="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-amber-500 hover:opacity-90 text-white font-bold px-4 py-2 rounded-xl transition shadow-md">
+                    <button id="detailUpvoteBtn" onclick="upvoteCurrentDetail()" class="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md hover:opacity-90">
                         <i class="fa-solid fa-thumbs-up"></i>
                         <span id="detailVoteCount">0 Dukungan</span>
                     </button>
@@ -518,7 +509,7 @@
                     <i class="fa-solid fa-trash-can"></i>
                 </div>
                 <h3 class="text-base font-bold text-white mb-1">Hapus Aspirasi Ini?</h3>
-                <p class="text-xs text-slate-400 mb-5">Tindakan ini tidak dapat dibatalkan. Aspirasi akan terhapus secara permanen dari sistem.</p>
+                <p class="text-xs text-slate-400 mb-5">Tindakan ini tidak dapat dibatalkan. Aspirasi akan terhapus secara permanen untuk semua siswa.</p>
                 
                 <div class="flex items-center justify-center space-x-3">
                     <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition">
@@ -553,9 +544,26 @@
         </div>
     </footer>
 
-    <script>
-        /* Clean initial Aspirations state (Empty by default) */
-        const initialAspirations = [];
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, updateDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'kilas-smanera-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined'
+            ? JSON.parse(__firebase_config)
+            : {
+                apiKey: "AIzaSyDemoConfigForKilasSmaneraKey",
+                authDomain: "kilas-smanera.firebaseapp.com",
+                projectId: "kilas-smanera",
+                storageBucket: "kilas-smanera.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:123456789"
+            };
+
+        let app, auth, db;
+        let currentUser = null;
+        let isCloudConnected = false;
 
         /* Application Global State */
         let aspirations = [];
@@ -564,12 +572,15 @@
         let currentView = 'floating'; // 'floating' | 'grid'
         let currentDetailId = null;
 
-        /* Admin & Moderation State */
+        /* Track local upvoted aspirations to enforce 1 vote per device */
+        let upvotedAspirations = new Set(JSON.parse(localStorage.getItem('kilas_upvoted_ids') || '[]'));
+
+        /* Admin Moderation State */
         let isAdminLoggedIn = false;
-        const ADMIN_SECRET_PASS = 'mpk20272028smanera'; // MPK admin password
+        const ADMIN_SECRET_PASS = 'mpk20272028smanera';
         let pendingDeleteId = null;
 
-        /* Floating Physics Animation Engine State */
+        /* Physics Floating Canvas Engine State */
         let physicsNodes = [];
         let animationFrameId = null;
         let isDraggingCard = false;
@@ -577,18 +588,66 @@
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadData();
+        window.addEventListener('DOMContentLoaded', async () => {
             setupPhysicsCanvas();
             renderStats();
-            renderView();
-            
-            // Handle Window Resize for floating boundaries
+
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const res = await signInWithCustomToken(auth, __initial_auth_token);
+                    currentUser = res.user;
+                } else {
+                    const res = await signInAnonymously(auth);
+                    currentUser = res.user;
+                }
+
+                if (currentUser) {
+                    isCloudConnected = true;
+                    setupRealtimeListener();
+                } else {
+                    loadLocalStorage();
+                }
+            } catch (err) {
+                console.warn("Cloud connection error, falling back to local storage:", err);
+                isCloudConnected = false;
+                loadLocalStorage();
+            }
+
             window.addEventListener('resize', handleResize);
         });
 
-        function loadData() {
-            const saved = localStorage.getItem('kilas_aspirations') || localStorage.getItem('suara_siswa_aspirations');
+        function setupRealtimeListener() {
+            if (!currentUser || !db) return;
+
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'aspirations');
+
+            onSnapshot(colRef, (snapshot) => {
+                const cloudItems = [];
+                snapshot.forEach((docSnap) => {
+                    cloudItems.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                // Sort descending by creation timestamp
+                cloudItems.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+                aspirations = cloudItems;
+                saveLocalStorage();
+                renderView();
+            }, (error) => {
+                console.error("Firestore real-time error:", error);
+                loadLocalStorage();
+            });
+        }
+
+        function loadLocalStorage() {
+            const saved = localStorage.getItem('kilas_aspirations');
             if (saved) {
                 try {
                     aspirations = JSON.parse(saved);
@@ -597,11 +656,11 @@
                 }
             } else {
                 aspirations = [];
-                saveData();
             }
+            renderView();
         }
 
-        function saveData() {
+        function saveLocalStorage() {
             localStorage.setItem('kilas_aspirations', JSON.stringify(aspirations));
         }
 
@@ -615,7 +674,7 @@
                         <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-3">
                             <i class="fa-solid fa-bullhorn"></i>
                         </div>
-                        <p class="text-white font-bold text-base">Belum ada aspirasi di sini</p>
+                        <p class="text-white font-bold text-base">Belum Ada Aspirasi Siswa</p>
                         <p class="text-xs text-slate-400 max-w-xs mt-1">Jadilah siswa pertama SMANERA yang mengirimkan aspirasi atau ide terbaikmu!</p>
                         <button onclick="openModal()" class="mt-4 px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-xs rounded-xl hover:opacity-90 transition shadow-lg shadow-amber-500/20">
                             + Kirim Aspirasi Pertama
@@ -633,8 +692,13 @@
                 cardEl.style.left = `${node.x}px`;
                 cardEl.style.top = `${node.y}px`;
 
+                const isVoted = upvotedAspirations.has(asp.id);
+                const voteBtnStyle = isVoted
+                    ? "bg-emerald-500 text-slate-950 font-extrabold border-emerald-400"
+                    : "bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border-amber-500/30";
+
                 const adminDeleteBtnHtml = isAdminLoggedIn ? `
-                    <button onclick="event.stopPropagation(); promptDelete('${asp.id}')" class="w-6 h-6 rounded-lg bg-red-600/80 hover:bg-red-500 text-white flex items-center justify-center text-[10px] shadow transition" title="Hapus (Admin)">
+                    <button onclick="event.stopPropagation(); promptDelete('${asp.id}')" class="w-6 h-6 rounded-lg bg-red-600 hover:bg-red-500 text-white flex items-center justify-center text-[10px] shadow transition" title="Hapus Aspirasi (Admin MPK)">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
                 ` : '';
@@ -657,25 +721,22 @@
                             <p class="font-bold text-amber-200 truncate">${escapeHtml(asp.name)}</p>
                             <p class="text-[9px] text-slate-400 truncate">${escapeHtml(asp.grade)}</p>
                         </div>
-                        <button onclick="event.stopPropagation(); upvote('${asp.id}')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-bold border border-amber-500/30 transition">
-                            <i class="fa-solid fa-thumbs-up text-[10px]"></i>
-                            <span>${asp.upvotes}</span>
+                        <button onclick="event.stopPropagation(); upvote('${asp.id}')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl font-bold border transition ${voteBtnStyle}">
+                            <i class="fa-solid ${isVoted ? 'fa-check' : 'fa-thumbs-up'} text-[10px]"></i>
+                            <span>${asp.upvotes || 1}</span>
                         </button>
                     </div>
                 `;
 
-                // Hover Pause events
                 cardEl.addEventListener('mouseenter', () => node.isHovered = true);
                 cardEl.addEventListener('mouseleave', () => node.isHovered = false);
 
-                // Click to view detail
                 cardEl.addEventListener('click', (e) => {
                     if (!isDraggingCard) {
                         openDetailModal(asp.id);
                     }
                 });
 
-                // Drag and Drop Event Listeners
                 cardEl.addEventListener('mousedown', (e) => startDrag(e, node));
                 cardEl.addEventListener('touchstart', (e) => startDrag(e.touches[0], node), { passive: true });
 
@@ -705,8 +766,13 @@
                 const card = document.createElement('div');
                 card.className = `p-5 rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${getThemeStyle(asp.theme)} flex flex-col justify-between`;
                 
+                const isVoted = upvotedAspirations.has(asp.id);
+                const voteBtnStyle = isVoted
+                    ? "bg-emerald-500 text-slate-950 border border-emerald-400 cursor-default"
+                    : "bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 hover:opacity-90";
+
                 const adminDeleteBtnHtml = isAdminLoggedIn ? `
-                    <button onclick="promptDelete('${asp.id}')" class="px-2.5 py-1.5 rounded-xl bg-red-600/80 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1 shadow" title="Hapus Aspirasi">
+                    <button onclick="promptDelete('${asp.id}')" class="px-2.5 py-1.5 rounded-xl bg-red-600/80 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1 shadow" title="Hapus Aspirasi (Admin MPK)">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
                 ` : '';
@@ -733,15 +799,284 @@
                             <button onclick="openDetailModal('${asp.id}')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
                                 Detail
                             </button>
-                            <button onclick="upvote('${asp.id}')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 text-xs font-extrabold hover:opacity-90 transition flex items-center gap-1 shadow">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                <span>${asp.upvotes}</span>
+                            <button onclick="upvote('${asp.id}')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1 shadow ${voteBtnStyle}">
+                                <i class="fa-solid ${isVoted ? 'fa-check' : 'fa-thumbs-up'}"></i>
+                                <span>${asp.upvotes || 1} ${isVoted ? 'Didukung' : ''}</span>
                             </button>
                         </div>
                     </div>
                 `;
                 wrapper.appendChild(card);
             });
+        }
+
+        function setupPhysicsCanvas() {
+            const container = document.getElementById('floatingContainer');
+            const rect = container.getBoundingClientRect();
+            const width = rect.width || 800;
+            const height = rect.height || 520;
+
+            const filtered = getFilteredAspirations();
+
+            physicsNodes = filtered.map((asp) => {
+                const existing = physicsNodes.find(n => n.id === asp.id);
+                if (existing) {
+                    existing.data = asp;
+                    return existing;
+                }
+
+                const cardWidth = 240;
+                const cardHeight = 150;
+                const x = Math.random() * Math.max(10, width - cardWidth - 20) + 10;
+                const y = Math.random() * Math.max(10, height - cardHeight - 20) + 10;
+                
+                const vx = (Math.random() - 0.5) * 0.8;
+                const vy = (Math.random() - 0.5) * 0.8;
+
+                return {
+                    id: asp.id,
+                    data: asp,
+                    x: x,
+                    y: y,
+                    vx: vx === 0 ? 0.4 : vx,
+                    vy: vy === 0 ? 0.4 : vy,
+                    width: cardWidth,
+                    height: cardHeight,
+                    isHovered: false
+                };
+            });
+
+            renderFloatingDOMNodes();
+            startPhysicsLoop();
+        }
+
+        function startPhysicsLoop() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            function step() {
+                if (currentView === 'floating') {
+                    updatePhysicsPositions();
+                }
+                animationFrameId = requestAnimationFrame(step);
+            }
+            animationFrameId = requestAnimationFrame(step);
+        }
+
+        function updatePhysicsPositions() {
+            const container = document.getElementById('floatingContainer');
+            if (!container) return;
+            const bounds = container.getBoundingClientRect();
+
+            physicsNodes.forEach(node => {
+                if (draggedNode && draggedNode.id === node.id) return;
+                if (node.isHovered) return;
+
+                node.x += node.vx;
+                node.y += node.vy;
+
+                const maxX = bounds.width - node.width - 15;
+                const maxY = bounds.height - node.height - 15;
+
+                if (node.x <= 10) {
+                    node.x = 10;
+                    node.vx *= -1;
+                } else if (node.x >= maxX) {
+                    node.x = maxX;
+                    node.vx *= -1;
+                }
+
+                if (node.y <= 10) {
+                    node.y = 10;
+                    node.vy *= -1;
+                } else if (node.y >= maxY) {
+                    node.y = maxY;
+                    node.vy *= -1;
+                }
+
+                const el = document.getElementById(`node-${node.id}`);
+                if (el) {
+                    el.style.left = `${node.x}px`;
+                    el.style.top = `${node.y}px`;
+                }
+            });
+        }
+
+        function startDrag(e, node) {
+            isDraggingCard = false;
+            draggedNode = node;
+            const cardEl = document.getElementById(`node-${node.id}`);
+            const rect = cardEl.getBoundingClientRect();
+
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
+
+            const onMove = (moveEvent) => {
+                isDraggingCard = true;
+                const evt = moveEvent.touches ? moveEvent.touches[0] : moveEvent;
+                const containerRect = document.getElementById('floatingContainer').getBoundingClientRect();
+
+                let newX = evt.clientX - containerRect.left - dragOffsetX;
+                let newY = evt.clientY - containerRect.top - dragOffsetY;
+
+                newX = Math.max(5, Math.min(newX, containerRect.width - node.width - 5));
+                newY = Math.max(5, Math.min(newY, containerRect.height - node.height - 5));
+
+                node.x = newX;
+                node.y = newY;
+
+                cardEl.style.left = `${newX}px`;
+                cardEl.style.top = `${newY}px`;
+            };
+
+            const onEnd = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+                
+                setTimeout(() => {
+                    draggedNode = null;
+                }, 50);
+            };
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+            document.addEventListener('touchmove', onMove, { passive: true });
+            document.addEventListener('touchend', onEnd);
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            try {
+                const nameInput = document.getElementById('inputName').value.trim();
+                const gradeInput = document.getElementById('inputGrade').value;
+                const categoryEl = document.querySelector('input[name="categoryOption"]:checked');
+                const themeEl = document.querySelector('input[name="cardTheme"]:checked');
+                const textInput = document.getElementById('inputText').value.trim();
+
+                if (!textInput || !gradeInput) {
+                    showToast('Gagal', 'Mohon lengkapi pilihan kelas dan pesan aspirasi Anda.');
+                    return;
+                }
+
+                const categoryInput = categoryEl ? categoryEl.value : 'Fasilitas';
+                const themeInput = themeEl ? themeEl.value : 'blue';
+                const newId = 'asp-' + Date.now();
+
+                const newAspiration = {
+                    id: newId,
+                    name: nameInput || 'Siswa Anonim',
+                    grade: gradeInput,
+                    category: categoryInput,
+                    text: textInput,
+                    upvotes: 1,
+                    theme: themeInput,
+                    time: 'Baru saja',
+                    createdAt: Date.now()
+                };
+
+                /* Auto-vote for own created aspiration */
+                upvotedAspirations.add(newId);
+                localStorage.setItem('kilas_upvoted_ids', JSON.stringify([...upvotedAspirations]));
+
+                if (isCloudConnected && currentUser && db) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', newId);
+                    await setDoc(docRef, newAspiration);
+                } else {
+                    aspirations.unshift(newAspiration);
+                    saveLocalStorage();
+                    renderView();
+                }
+
+                activeCategory = 'All';
+                searchQuery = '';
+                const searchEl = document.getElementById('searchInput');
+                if (searchEl) searchEl.value = '';
+                const clearBtn = document.getElementById('clearSearchBtn');
+                if (clearBtn) clearBtn.classList.add('hidden');
+
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    if (btn.textContent.includes('Semua')) {
+                        btn.className = "category-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-amber-500 text-slate-950 shadow-md";
+                    } else {
+                        btn.className = "category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700";
+                    }
+                });
+
+                closeModal();
+                showToast('Aspirasi Diterbangkan! 🚀', 'Terima kasih, aspirasi kamu berhasil dipublikasikan secara real-time.');
+            } catch (err) {
+                console.error('Error submitting aspiration:', err);
+                showToast('Terjadi Kesalahan', 'Gagal mengirimkan aspirasi, silakan coba lagi.');
+            }
+        }
+
+        async function upvote(id) {
+            if (upvotedAspirations.has(id)) {
+                showToast('Sudah Didukung! ⚠️', 'Kamu sudah memberikan dukungan untuk aspirasi ini sebelumnya.');
+                return;
+            }
+
+            const asp = aspirations.find(a => a.id === id);
+            if (!asp) return;
+
+            // Save to voted set and localStorage
+            upvotedAspirations.add(id);
+            localStorage.setItem('kilas_upvoted_ids', JSON.stringify([...upvotedAspirations]));
+
+            if (isCloudConnected && currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', id);
+                    await updateDoc(docRef, {
+                        upvotes: increment(1)
+                    });
+                } catch (e) {
+                    asp.upvotes = (asp.upvotes || 1) + 1;
+                    saveLocalStorage();
+                    renderView();
+                }
+            } else {
+                asp.upvotes = (asp.upvotes || 1) + 1;
+                saveLocalStorage();
+                renderView();
+            }
+
+            showToast('Dukungan Ditambahkan! 👍', `Kamu berhasil mendukung aspirasi dari ${asp.name}.`);
+        }
+
+        function promptDelete(id) {
+            pendingDeleteId = id;
+            const modal = document.getElementById('deleteModal');
+            const content = document.getElementById('deleteModalContent');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        async function executeDelete() {
+            if (!pendingDeleteId) return;
+
+            const targetId = pendingDeleteId;
+            closeDeleteModal();
+            closeDetailModal();
+
+            if (isCloudConnected && currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', targetId);
+                    await deleteDoc(docRef);
+                } catch (e) {
+                    console.error("Cloud delete error:", e);
+                    aspirations = aspirations.filter(a => a.id !== targetId);
+                    saveLocalStorage();
+                    renderView();
+                }
+            } else {
+                aspirations = aspirations.filter(a => a.id !== targetId);
+                saveLocalStorage();
+                renderView();
+            }
+
+            showToast('Aspirasi Dihapus 🗑️', 'Aspirasi telah berhasil dihapus dari sistem oleh Admin MPK.');
         }
 
         function openAdminModal() {
@@ -797,15 +1132,6 @@
             }
         }
 
-        function promptDelete(id) {
-            pendingDeleteId = id;
-            const modal = document.getElementById('deleteModal');
-            const content = document.getElementById('deleteModalContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
         function closeDeleteModal() {
             const modal = document.getElementById('deleteModal');
             const content = document.getElementById('deleteModalContent');
@@ -813,17 +1139,6 @@
             content.classList.add('scale-95');
             modal.classList.add('opacity-0', 'pointer-events-none');
             pendingDeleteId = null;
-        }
-
-        function executeDelete() {
-            if (pendingDeleteId) {
-                aspirations = aspirations.filter(a => a.id !== pendingDeleteId);
-                saveData();
-                closeDeleteModal();
-                closeDetailModal();
-                renderView();
-                showToast('Aspirasi Dihapus', 'Aspirasi telah berhasil dihapus dari sistem oleh Admin.');
-            }
         }
 
         function openDetailModal(id) {
@@ -836,7 +1151,18 @@
             document.getElementById('detailGrade').textContent = asp.grade;
             document.getElementById('detailText').textContent = asp.text;
             document.getElementById('detailTime').textContent = asp.time || 'Baru saja';
-            document.getElementById('detailVoteCount').textContent = `${asp.upvotes} Dukungan`;
+
+            const isVoted = upvotedAspirations.has(asp.id);
+            const upvoteBtn = document.getElementById('detailUpvoteBtn');
+            const voteCountEl = document.getElementById('detailVoteCount');
+
+            voteCountEl.textContent = `${asp.upvotes || 1} Dukungan ${isVoted ? '(Didukung)' : ''}`;
+
+            if (isVoted) {
+                upvoteBtn.className = "flex items-center space-x-2 bg-emerald-500 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md cursor-default";
+            } else {
+                upvoteBtn.className = "flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md hover:opacity-90";
+            }
 
             const deleteBtn = document.getElementById('detailDeleteBtn');
             if (isAdminLoggedIn) {
@@ -854,277 +1180,29 @@
             content.classList.add('scale-100');
         }
 
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('detailContent');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            currentDetailId = null;
+        }
+
         function requestDeleteFromDetail() {
             if (currentDetailId) {
                 promptDelete(currentDetailId);
             }
         }
 
-        function saveData() {
-            localStorage.setItem('kilas_aspirations', JSON.stringify(aspirations));
-        }
-
-        function setupPhysicsCanvas() {
-            const container = document.getElementById('floatingContainer');
-            const rect = container.getBoundingClientRect();
-            const width = rect.width || 800;
-            const height = rect.height || 550;
-
-            // Initialize or Sync Physics Nodes from Active Filtered Aspirations
-            const filtered = getFilteredAspirations();
-
-            physicsNodes = filtered.map((asp, index) => {
-                // Find existing node if available to preserve position
-                const existing = physicsNodes.find(n => n.id === asp.id);
-                if (existing) {
-                    existing.data = asp;
-                    return existing;
+        function upvoteCurrentDetail() {
+            if (currentDetailId) {
+                upvote(currentDetailId);
+                const asp = aspirations.find(a => a.id === currentDetailId);
+                if (asp) {
+                    document.getElementById('detailVoteCount').textContent = `${asp.upvotes || 1} Dukungan`;
                 }
-
-                // Create initial random spread layout
-                const cardWidth = 240;
-                const cardHeight = 150;
-                const x = Math.random() * Math.max(10, width - cardWidth - 20) + 10;
-                const y = Math.random() * Math.max(10, height - cardHeight - 20) + 10;
-                
-                // Random floating velocity
-                const vx = (Math.random() - 0.5) * 0.8;
-                const vy = (Math.random() - 0.5) * 0.8;
-
-                return {
-                    id: asp.id,
-                    data: asp,
-                    x: x,
-                    y: y,
-                    vx: vx === 0 ? 0.4 : vx,
-                    vy: vy === 0 ? 0.4 : vy,
-                    width: cardWidth,
-                    height: cardHeight,
-                    isHovered: false
-                };
-            });
-
-            renderFloatingDOMNodes();
-            startPhysicsLoop();
-        }
-
-        function startPhysicsLoop() {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-
-            function step() {
-                if (currentView === 'floating') {
-                    updatePhysicsPositions();
-                }
-                animationFrameId = requestAnimationFrame(step);
             }
-            animationFrameId = requestAnimationFrame(step);
-        }
-
-        function updatePhysicsPositions() {
-            const container = document.getElementById('floatingContainer');
-            if (!container) return;
-            const bounds = container.getBoundingClientRect();
-
-            physicsNodes.forEach(node => {
-                // Skip movement if card is being dragged or hovered
-                if (draggedNode && draggedNode.id === node.id) return;
-                if (node.isHovered) return;
-
-                // Update coordinates
-                node.x += node.vx;
-                node.y += node.vy;
-
-                // Bounce off boundaries
-                const maxX = bounds.width - node.width - 15;
-                const maxY = bounds.height - node.height - 15;
-
-                if (node.x <= 10) {
-                    node.x = 10;
-                    node.vx *= -1;
-                } else if (node.x >= maxX) {
-                    node.x = maxX;
-                    node.vx *= -1;
-                }
-
-                if (node.y <= 10) {
-                    node.y = 10;
-                    node.vy *= -1;
-                } else if (node.y >= maxY) {
-                    node.y = maxY;
-                    node.vy *= -1;
-                }
-
-                // Apply style position transform
-                const el = document.getElementById(`node-${node.id}`);
-                if (el) {
-                    el.style.left = `${node.x}px`;
-                    el.style.top = `${node.y}px`;
-                }
-            });
-        }
-
-        function renderFloatingDOMNodes() {
-            const container = document.getElementById('floatingContainer');
-            container.innerHTML = '';
-
-            if (physicsNodes.length === 0) {
-                container.innerHTML = `
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                        <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-3">
-                            <i class="fa-solid fa-ghost"></i>
-                        </div>
-                        <p class="text-white font-bold text-base">Tidak ada aspirasi mengambang</p>
-                        <p class="text-xs text-slate-400 max-w-xs mt-1">Coba ganti filter atau jadilah yang pertama menyampaikan masukan di kategori ini!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            physicsNodes.forEach(node => {
-                const asp = node.data;
-                const cardEl = document.createElement('div');
-                cardEl.id = `node-${node.id}`;
-                cardEl.className = `aspiration-card w-[240px] p-4 rounded-2xl border transition-shadow duration-300 ${getThemeStyle(asp.theme)}`;
-                cardEl.style.left = `${node.x}px`;
-                cardEl.style.top = `${node.y}px`;
-
-                cardEl.innerHTML = `
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-900/60 text-amber-300 border border-amber-400/20">
-                            ${asp.category}
-                        </span>
-                        <span class="text-[10px] text-slate-400">${asp.time || 'Baru'}</span>
-                    </div>
-                    <p class="text-xs font-semibold text-white line-clamp-3 mb-3 leading-relaxed pointer-events-none">
-                        "${escapeHtml(asp.text)}"
-                    </p>
-                    <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
-                        <div class="truncate max-w-[120px]">
-                            <p class="font-bold text-amber-200 truncate">${escapeHtml(asp.name)}</p>
-                            <p class="text-[9px] text-slate-400 truncate">${escapeHtml(asp.grade)}</p>
-                        </div>
-                        <button onclick="event.stopPropagation(); upvote('${asp.id}')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-amber-300 font-bold border border-amber-500/30 transition">
-                            <i class="fa-solid fa-thumbs-up text-[10px]"></i>
-                            <span>${asp.upvotes}</span>
-                        </button>
-                    </div>
-                `;
-
-                // Hover Pause events
-                cardEl.addEventListener('mouseenter', () => node.isHovered = true);
-                cardEl.addEventListener('mouseleave', () => node.isHovered = false);
-
-                // Click to view detail
-                cardEl.addEventListener('click', (e) => {
-                    if (!isDraggingCard) {
-                        openDetailModal(asp.id);
-                    }
-                });
-
-                // Drag and Drop Event Listeners
-                cardEl.addEventListener('mousedown', (e) => startDrag(e, node));
-                cardEl.addEventListener('touchstart', (e) => startDrag(e.touches[0], node), { passive: true });
-
-                container.appendChild(cardEl);
-            });
-        }
-
-        function startDrag(e, node) {
-            isDraggingCard = false;
-            draggedNode = node;
-            const cardEl = document.getElementById(`node-${node.id}`);
-            const rect = cardEl.getBoundingClientRect();
-
-            dragOffsetX = e.clientX - rect.left;
-            dragOffsetY = e.clientY - rect.top;
-
-            const onMove = (moveEvent) => {
-                isDraggingCard = true;
-                const evt = moveEvent.touches ? moveEvent.touches[0] : moveEvent;
-                const containerRect = document.getElementById('floatingContainer').getBoundingClientRect();
-
-                let newX = evt.clientX - containerRect.left - dragOffsetX;
-                let newY = evt.clientY - containerRect.top - dragOffsetY;
-
-                // Clamp boundaries
-                newX = Math.max(5, Math.min(newX, containerRect.width - node.width - 5));
-                newY = Math.max(5, Math.min(newY, containerRect.height - node.height - 5));
-
-                node.x = newX;
-                node.y = newY;
-
-                cardEl.style.left = `${newX}px`;
-                cardEl.style.top = `${newY}px`;
-            };
-
-            const onEnd = () => {
-                document.removeEventListener('mousemove', onMove);
-                document.removeEventListener('mouseup', onEnd);
-                document.removeEventListener('touchmove', onMove);
-                document.removeEventListener('touchend', onEnd);
-                
-                setTimeout(() => {
-                    draggedNode = null;
-                }, 50);
-            };
-
-            document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup', onEnd);
-            document.addEventListener('touchmove', onMove, { passive: true });
-            document.addEventListener('touchend', onEnd);
-        }
-
-        function renderGridView() {
-            const wrapper = document.getElementById('gridWrapper');
-            const emptyState = document.getElementById('emptyGridState');
-            const filtered = getFilteredAspirations();
-
-            wrapper.innerHTML = '';
-
-            if (filtered.length === 0) {
-                wrapper.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-                return;
-            }
-
-            wrapper.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-
-            filtered.forEach(asp => {
-                const card = document.createElement('div');
-                card.className = `p-5 rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${getThemeStyle(asp.theme)} flex flex-col justify-between`;
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-extrabold uppercase px-2.5 py-1 rounded-lg bg-slate-900/80 text-amber-300 border border-amber-400/30">
-                                ${asp.category}
-                            </span>
-                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${asp.time || 'Baru'}</span>
-                        </div>
-                        <p class="text-sm font-medium text-slate-100 mb-4 leading-relaxed">
-                            "${escapeHtml(asp.text)}"
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-bold text-amber-200">${escapeHtml(asp.name)}</p>
-                            <p class="text-[10px] text-slate-400">${escapeHtml(asp.grade)}</p>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="openDetailModal('${asp.id}')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
-                                Detail
-                            </button>
-                            <button onclick="upvote('${asp.id}')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 text-xs font-extrabold hover:opacity-90 transition flex items-center gap-1 shadow">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                <span>${asp.upvotes}</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                wrapper.appendChild(card);
-            });
         }
 
         function getThemeStyle(theme) {
@@ -1216,7 +1294,7 @@
 
         function renderStats() {
             document.getElementById('statTotal').textContent = aspirations.length;
-            const topVote = aspirations.reduce((max, item) => item.upvotes > max ? item.upvotes : max, 0);
+            const topVote = aspirations.reduce((max, item) => (item.upvotes || 1) > max ? (item.upvotes || 1) : max, 0);
             document.getElementById('statTopVotes').textContent = `${topVote} Dukungan`;
         }
 
@@ -1243,112 +1321,6 @@
             document.getElementById('charCounter').textContent = `${text.length}/280`;
         }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            try {
-                const nameInput = document.getElementById('inputName').value.trim();
-                const gradeInput = document.getElementById('inputGrade').value;
-                const categoryEl = document.querySelector('input[name="categoryOption"]:checked');
-                const themeEl = document.querySelector('input[name="cardTheme"]:checked');
-                const textInput = document.getElementById('inputText').value.trim();
-
-                if (!textInput || !gradeInput) {
-                    showToast('Gagal', 'Mohon lengkapi pilihan kelas dan pesan aspirasi Anda.');
-                    return;
-                }
-
-                const categoryInput = categoryEl ? categoryEl.value : 'Fasilitas';
-                const themeInput = themeEl ? themeEl.value : 'blue';
-
-                const newAspiration = {
-                    id: 'asp-' + Date.now(),
-                    name: nameInput || 'Siswa Anonim',
-                    grade: gradeInput,
-                    category: categoryInput,
-                    text: textInput,
-                    upvotes: 1,
-                    theme: themeInput,
-                    time: 'Baru saja'
-                };
-
-                aspirations.unshift(newAspiration);
-                saveData();
-
-                // Reset filter & pencarian agar aspirasi baru langsung terlihat
-                activeCategory = 'All';
-                searchQuery = '';
-                const searchEl = document.getElementById('searchInput');
-                if (searchEl) searchEl.value = '';
-                const clearBtn = document.getElementById('clearSearchBtn');
-                if (clearBtn) clearBtn.classList.add('hidden');
-
-                // Update tampilan tombol kategori
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    if (btn.textContent.includes('Semua')) {
-                        btn.className = "category-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-amber-500 text-slate-950 shadow-md";
-                    } else {
-                        btn.className = "category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700";
-                    }
-                });
-
-                closeModal();
-                renderView();
-                showToast('Aspirasi Diterbangkan! 🚀', 'Terima kasih, aspirasi kamu berhasil dipublikasikan dan dapat dilihat oleh siswa lain.');
-            } catch (err) {
-                console.error('Error submitting aspiration:', err);
-                showToast('Terjadi Kesalahan', 'Gagal mengirimkan aspirasi, silakan coba lagi.');
-            }
-        }
-
-        function upvote(id) {
-            const asp = aspirations.find(a => a.id === id);
-            if (asp) {
-                asp.upvotes += 1;
-                saveData();
-                renderView();
-                showToast('Dukungan Ditambahkan!', `Kamu menyukai aspirasi dari ${asp.name}.`);
-            }
-        }
-
-        function openDetailModal(id) {
-            const asp = aspirations.find(a => a.id === id);
-            if (!asp) return;
-
-            currentDetailId = id;
-            document.getElementById('detailCategory').textContent = asp.category;
-            document.getElementById('detailAuthor').textContent = asp.name;
-            document.getElementById('detailGrade').textContent = asp.grade;
-            document.getElementById('detailText').textContent = asp.text;
-            document.getElementById('detailTime').textContent = asp.time || 'Baru saja';
-            document.getElementById('detailVoteCount').textContent = `${asp.upvotes} Dukungan`;
-
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('detailContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closeDetailModal() {
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('detailContent');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            currentDetailId = null;
-        }
-
-        function upvoteCurrentDetail() {
-            if (currentDetailId) {
-                upvote(currentDetailId);
-                const asp = aspirations.find(a => a.id === currentDetailId);
-                if (asp) {
-                    document.getElementById('detailVoteCount').textContent = `${asp.upvotes} Dukungan`;
-                }
-            }
-        }
-
-        /* Utility Toast Notification */
         function showToast(title, message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastTitle').textContent = title;
@@ -1370,8 +1342,30 @@
         }
 
         function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            if (!str) return '';
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
+
+        window.switchView = switchView;
+        window.logoutAdmin = logoutAdmin;
+        window.openAdminModal = openAdminModal;
+        window.closeAdminModal = closeAdminModal;
+        window.handleAdminLogin = handleAdminLogin;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.filterCategory = filterCategory;
+        window.handleSearch = handleSearch;
+        window.clearSearch = clearSearch;
+        window.updateCharCount = updateCharCount;
+        window.handleFormSubmit = handleFormSubmit;
+        window.upvote = upvote;
+        window.promptDelete = promptDelete;
+        window.closeDeleteModal = closeDeleteModal;
+        window.executeDelete = executeDelete;
+        window.openDetailModal = openDetailModal;
+        window.closeDetailModal = closeDetailModal;
+        window.requestDeleteFromDetail = requestDeleteFromDetail;
+        window.upvoteCurrentDetail = upvoteCurrentDetail;
     </script>
 </body>
 </html>
