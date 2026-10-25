@@ -3,1369 +3,1436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KILAS SMANERA - Kanal Informasi & Layanan Aspirasi Siswa SMANERA</title>
-    
+    <title>KILAS - Managed by MPK</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <!-- Google Fonts Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    colors: {
+                        kilasBlue: '#0f52ba',
+                        kilasLightBlue: '#2563eb',
+                        kilasYellow: '#f59e0b',
+                        kilasDark: '#0b132b',
+                    },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
-                    colors: {
-                        brand: {
-                            blue: '#1E3A8A',    /* Deep Vibrant Blue */
-                            blueLight: '#3B82F6',/* Electric Blue */
-                            blueSoft: '#EFF6FF',
-                            yellow: '#F59E0B',  /* Accent Warm Amber/Yellow */
-                            yellowGlow: '#FBBF24',
-                            yellowLight: '#FEF3C7',
-                            darkBg: '#0B132B',
-                        }
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 4s ease-in-out infinite',
                     },
                     keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 15px rgba(245, 158, 11, 0.4)' },
-                            '50%': { boxShadow: '0 0 25px rgba(245, 158, 11, 0.8)' },
-                        },
-                        floatSlow: {
+                        float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
                         }
-                    },
-                    animation: {
-                        'pulse-glow': 'pulseGlow 3s infinite ease-in-out',
-                        'float-slow': 'floatSlow 4s infinite ease-in-out',
                     }
                 }
             }
         }
     </script>
-
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            background-color: #0f172a;
+        .fade-exit {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.7s ease-in-out;
+            pointer-events: none;
+        }
+        
+        .fade-enter {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.7s ease-in-out;
         }
 
-        /* Glassmorphism background effects */
-        .glass-card {
-            background: rgba(30, 58, 138, 0.4);
+        .dark-glass {
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #f59e0b;
-        }
-
-        /* Canvas background dots pattern */
-        .dot-pattern {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-
-        /* Floating item physics boundary container */
-        #floatingContainer {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 180px);
-            min-height: 520px;
-            overflow: hidden;
-        }
-
-        .aspiration-card {
-            position: absolute;
-            user-select: none;
-            touch-action: none;
-            cursor: grab;
-            transition: transform 0.1s ease, box-shadow 0.2s ease;
-            will-change: transform, left, top;
-        }
-
-        .aspiration-card:active {
-            cursor: grabbing;
-            z-index: 9999 !important;
-        }
-
-        .gradient-text-yellow {
-            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="text-slate-100 bg-slate-900 dot-pattern min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 font-sans text-slate-800 antialiased overflow-x-hidden min-h-screen">
 
-    <header class="sticky top-0 z-50 glass-nav px-4 lg:px-8 py-3 transition-all duration-300">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-            
-            <!-- Logo Section -->
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-blue to-brand-yellow flex items-center justify-center shadow-lg shadow-brand-yellow/20 ring-2 ring-brand-yellow/30">
-                    <i class="fa-solid fa-bullhorn text-amber-300 text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-xl tracking-tight flex items-center gap-2">
-                        <span class="text-white">KILAS</span>
-                        <span class="gradient-text-yellow">SMANERA</span>
-                    </h1>
-                    <p class="text-[10px] sm:text-xs text-slate-300 font-semibold tracking-wider uppercase">KANAL INFORMASI & LAYANAN ASPIRASI SISWA SMANERA</p>
-                </div>
-            </div>
-
-            <!-- Stats Ribbon -->
-            <div class="hidden md:flex items-center space-x-6 text-xs bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700/60">
-                <div class="flex items-center space-x-2">
-                    <span id="syncIndicator" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" title="Tersambung ke Cloud Database Real-time"></span>
-                    <span class="text-slate-400">Total Aspirasi:</span>
-                    <span id="statTotal" class="font-bold text-amber-400">0</span>
-                </div>
-                <div class="h-3 w-px bg-slate-700"></div>
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-fire text-amber-400"></i>
-                    <span class="text-slate-400">Top Suara:</span>
-                    <span id="statTopVotes" class="font-bold text-blue-400">0 Dukungan</span>
-                </div>
-            </div>
-
-            <!-- Header Action Controls -->
-            <div class="flex items-center space-x-3">
-                <!-- View Switcher -->
-                <div class="bg-slate-800/90 p-1 rounded-xl border border-slate-700 flex items-center">
-                    <button id="btnFloatingView" onclick="switchView('floating')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-brand-blue text-white shadow">
-                        <i class="fa-solid fa-cloud"></i>
-                        <span class="hidden sm:inline">Mengambang</span>
-                    </button>
-                    <button id="btnGridView" onclick="switchView('grid')" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 text-slate-400 hover:text-white transition-all">
-                        <i class="fa-solid fa-table-cells"></i>
-                        <span class="hidden sm:inline">Matriks Grid</span>
-                    </button>
-                </div>
-
-                <!-- Admin Auth Button & Badge -->
-                <div id="adminBadgeContainer" class="hidden items-center bg-red-500/20 border border-red-500/40 text-red-300 px-3 py-1.5 rounded-xl text-xs font-bold gap-2">
-                    <i class="fa-solid fa-user-shield text-red-400"></i>
-                    <span>Admin MPK</span>
-                    <button onclick="logoutAdmin()" class="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded-lg ml-1 transition" title="Keluar Admin">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
-                </div>
-
-                <button id="btnAdminLogin" onclick="openAdminModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 text-xs font-bold transition flex items-center gap-1.5" title="Login Moderasi Admin MPK">
-                    <i class="fa-solid fa-key"></i>
-                    <span class="hidden md:inline">Admin MPK</span>
-                </button>
-
-                <!-- Submit Button -->
-                <button onclick="openModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-paper-plane text-slate-950"></i>
-                    <span>Kirim Aspirasi</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <section class="max-w-7xl mx-auto w-full px-4 pt-4 pb-2 z-20">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-3 bg-slate-800/50 p-2.5 rounded-2xl border border-slate-700/50 backdrop-blur-md">
-            
-            <!-- Category Filter Pills -->
-            <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
-                <button onclick="filterCategory('All')" class="category-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-amber-500 text-slate-950 shadow-md">
-                    🌟 Semua
-                </button>
-                <button onclick="filterCategory('Fasilitas')" class="category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700">
-                    🏫 Fasilitas & Sarana
-                </button>
-                <button onclick="filterCategory('Akademik')" class="category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700">
-                    📚 Akademik & Kurikulum
-                </button>
-                <button onclick="filterCategory('Ekstrakurikuler')" class="category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700">
-                    ⚽ Ekstrakurikuler & Seni
-                </button>
-                <button onclick="filterCategory('Kantin')" class="category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700">
-                    🍜 Kantin & Konsumsi
-                </button>
-                <button onclick="filterCategory('Lainnya')" class="category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700">
-                    💡 Ide Umum
-                </button>
-            </div>
-
-            <!-- Search & Controls -->
-            <div class="flex items-center gap-2 w-full md:w-72">
-                <div class="relative w-full">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Cari aspirasi siswa..." class="w-full bg-slate-900/80 border border-slate-700 text-slate-200 text-xs rounded-xl pl-9 pr-8 py-2 focus:outline-none focus:border-amber-400 transition placeholder-slate-500">
-                    <button onclick="clearSearch()" id="clearSearchBtn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <main class="relative flex-grow w-full max-w-7xl mx-auto px-4 my-2">
+    <!-- ================= WELCOME SCREEN / LANDING PAGE ================= -->
+    <div id="welcomeScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white px-4 transition-all duration-700">
         
-        <!-- Interactive Banner info for Floating Mode -->
-        <div id="floatingBanner" class="absolute top-3 left-1/2 -translate-x-1/2 z-10 bg-slate-800/90 text-slate-300 px-4 py-1.5 rounded-full text-xs border border-amber-500/30 flex items-center gap-2 shadow-lg backdrop-blur-md pointer-events-none">
-            <span class="flex h-2 w-2 relative">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-            </span>
-            <span>Aspirasi terhubung secara <strong>Real-time Cloud</strong>! Geser / Klik kartu untuk detail.</span>
-        </div>
+        <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1.5s;"></div>
 
-        <!-- 1. FLOATING SKY VIEW CONTAINER -->
-        <div id="floatingContainer" class="rounded-3xl border border-blue-900/40 bg-gradient-to-b from-slate-900/80 via-blue-950/20 to-slate-900/90 backdrop-blur-sm relative shadow-2xl">
-            <!-- Canvas physics cards render inside this dynamically -->
-        </div>
-
-        <!-- 2. GRID LIST VIEW CONTAINER (Hidden by default) -->
-        <div id="gridContainer" class="hidden min-h-[500px] py-4">
-            <div id="gridWrapper" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Grid cards populated dynamically -->
-            </div>
+        <div class="relative z-10 max-w-xl w-full mx-auto text-center p-8 sm:p-12 rounded-3xl dark-glass shadow-2xl border border-white/10 my-auto">
             
-            <!-- Empty state illustration -->
-            <div id="emptyGridState" class="hidden flex-col items-center justify-center py-20 text-center">
-                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-3xl text-amber-400 mb-4 border border-slate-700">
-                    <i class="fa-solid fa-wind"></i>
+            <div class="relative inline-block mb-6 group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-amber-500 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto bg-white rounded-full p-2 shadow-inner flex items-center justify-center overflow-hidden animate-float">
+                    <img src="logo-kilas.png" alt="Logo KILAS" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src='https://placehold.co/400x400/0f52ba/ffffff?text=Logo+KILAS';">
                 </div>
-                <h3 class="text-lg font-bold text-white mb-1">Belum Ada Aspirasi di Kategori Ini</h3>
-                <p class="text-slate-400 text-xs max-w-sm">Jadilah siswa pertama yang memberikan saran dan ide terbaikmu untuk SMANERA!</p>
-                <button onclick="openModal()" class="mt-4 px-4 py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400 transition">
-                    + Sampaikan Aspirasi
-                </button>
             </div>
-        </div>
-    </main>
 
-    <!-- Form Modal -->
-    <div id="aspirationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-slate-900 border border-amber-500/30 w-full max-w-lg rounded-3xl p-6 shadow-2xl shadow-amber-500/10 transform scale-95 transition-all duration-300 relative overflow-hidden" id="modalContent">
-            
-            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-amber-400 to-yellow-500"></div>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider text-white mb-3">
+                SELAMAT DATANG DI <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">KILAS</span>
+            </h1>
 
-            <div class="flex items-center justify-between mb-5 pt-2">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                        <i class="fa-solid fa-pen-to-square text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-white">Sampaikan Aspirasi Anda</h3>
-                        <p class="text-xs text-slate-400">Suaramu membantu membangun SMANERA lebih baik</p>
-                    </div>
-                </div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-slate-200 text-sm sm:text-base font-medium mb-8">
+                <span>Managed by <strong class="text-white font-semibold">MPK</strong></span>
+            </div>
+
+            <p class="text-slate-300 text-sm sm:text-base mb-8 max-w-md mx-auto font-light leading-relaxed">
+                Platform informasi terpadu dan media komunikasi resmi. Temukan berbagai pembaruan, kegiatan, dan aspirasi dalam satu genggaman.
+            </p>
+
+            <div class="max-w-xs mx-auto mb-8">
+                <button onclick="enterHomepage()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold text-base shadow-xl shadow-blue-600/30 transition-all duration-300 flex items-center justify-center gap-3 transform hover:-translate-y-0.5">
+                    <span>Masuk Beranda Website</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
                 </button>
             </div>
 
-            <!-- Form -->
-            <form id="aspirationForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <!-- Nama / Inisial -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Nama / Inisial (Opsional)</label>
-                        <input type="text" id="inputName" maxlength="30" placeholder="Contoh: Budi S. / Anonim" class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amber-400 transition placeholder-slate-500">
-                    </div>
-                    
-                    <!-- Kelas Select -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Kelas / Angkatan *</label>
-                        <select id="inputGrade" required class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-amber-400 transition">
-                            <option value="" disabled selected>Pilih Kelas</option>
-                            <optgroup label="Kelas 10">
-                                <option value="Kelas 10.1">Kelas 10.1</option>
-                                <option value="Kelas 10.2">Kelas 10.2</option>
-                                <option value="Kelas 10.3">Kelas 10.3</option>
-                                <option value="Kelas 10.4">Kelas 10.4</option>
-                                <option value="Kelas 10.5">Kelas 10.5</option>
-                                <option value="Kelas 10.6">Kelas 10.6</option>
-                                <option value="Kelas 10.7">Kelas 10.7</option>
-                                <option value="Kelas 10.8">Kelas 10.8</option>
-                                <option value="Kelas 10.9">Kelas 10.9</option>
-                                <option value="Kelas 10.10">Kelas 10.10</option>
-                            </optgroup>
-                            <optgroup label="Kelas 11">
-                                <option value="Kelas 11 F1.1">Kelas 11 F1.1</option>
-                                <option value="Kelas 11 F1.2">Kelas 11 F1.2</option>
-                                <option value="Kelas 11 F1.3">Kelas 11 F1.3</option>
-                                <option value="Kelas 11 F2.1">Kelas 11 F2.1</option>
-                                <option value="Kelas 11 F2.2">Kelas 11 F2.2</option>
-                                <option value="Kelas 11 F2.3">Kelas 11 F2.3</option>
-                                <option value="Kelas 11 F2.4">Kelas 11 F2.4</option>
-                                <option value="Kelas 11 F3.1">Kelas 11 F3.1</option>
-                                <option value="Kelas 11 F3.2">Kelas 11 F3.2</option>
-                                <option value="Kelas 11 F3.3">Kelas 11 F3.3</option>
-                            </optgroup>
-                            <optgroup label="Kelas 12">
-                                <option value="Kelas 12 IPA 1">Kelas 12 IPA 1</option>
-                                <option value="Kelas 12 IPA 2">Kelas 12 IPA 2</option>
-                                <option value="Kelas 12 IPA 3">Kelas 12 IPA 3</option>
-                                <option value="Kelas 12 IPA 4">Kelas 12 IPA 4</option>
-                                <option value="Kelas 12 IPA 5">Kelas 12 IPA 5</option>
-                                <option value="Kelas 12 IPS 1">Kelas 12 IPS 1</option>
-                                <option value="Kelas 12 IPS 2">Kelas 12 IPS 2</option>
-                                <option value="Kelas 12 IPS 3">Kelas 12 IPS 3</option>
-                                <option value="Kelas 12 IPS 4">Kelas 12 IPS 4</option>
-                                <option value="Kelas 12 IPS 5">Kelas 12 IPS 5</option>
-                            </optgroup>
-                            <option value="Alumni / Umum">Alumni / Umum</option>
-                        </select>
-                    </div>
-                </div>
+        </div>
 
-                <!-- Kategori Radio -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Kategori Aspirasi *</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="categoryOption" value="Fasilitas" checked class="peer sr-only">
-                            <div class="p-2 text-center rounded-xl border border-slate-700 text-slate-300 text-xs font-medium peer-checked:bg-amber-500 peer-checked:text-slate-950 peer-checked:font-bold peer-checked:border-amber-400 transition">
-                                🏫 Fasilitas
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="categoryOption" value="Akademik" class="peer sr-only">
-                            <div class="p-2 text-center rounded-xl border border-slate-700 text-slate-300 text-xs font-medium peer-checked:bg-amber-500 peer-checked:text-slate-950 peer-checked:font-bold peer-checked:border-amber-400 transition">
-                                📚 Akademik
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="categoryOption" value="Ekstrakurikuler" class="peer sr-only">
-                            <div class="p-2 text-center rounded-xl border border-slate-700 text-slate-300 text-xs font-medium peer-checked:bg-amber-500 peer-checked:text-slate-950 peer-checked:font-bold peer-checked:border-amber-400 transition">
-                                ⚽ Ekskul
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="categoryOption" value="Kantin" class="peer sr-only">
-                            <div class="p-2 text-center rounded-xl border border-slate-700 text-slate-300 text-xs font-medium peer-checked:bg-amber-500 peer-checked:text-slate-950 peer-checked:font-bold peer-checked:border-amber-400 transition">
-                                🍜 Kantin
-                            </div>
-                        </label>
-                        <label class="cursor-pointer col-span-2">
-                            <input type="radio" name="categoryOption" value="Lainnya" class="peer sr-only">
-                            <div class="p-2 text-center rounded-xl border border-slate-700 text-slate-300 text-xs font-medium peer-checked:bg-amber-500 peer-checked:text-slate-950 peer-checked:font-bold peer-checked:border-amber-400 transition">
-                                💡 Ide Umum / Lainnya
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Isi Aspirasi -->
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-semibold text-slate-300">Pesan / Aspirasi *</label>
-                        <span id="charCounter" class="text-[10px] text-slate-400">0/280</span>
-                    </div>
-                    <textarea id="inputText" required maxlength="280" rows="4" oninput="updateCharCount()" placeholder="Tuliskan ide, masukan, atau kritik membangun dengan santun dan jelas..." class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl p-3 focus:outline-none focus:border-amber-400 transition placeholder-slate-500 resize-none"></textarea>
-                </div>
-
-                <!-- Nuansa Kartu -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Pilih Nuansa Kartu Anda</label>
-                    <div class="flex items-center space-x-3">
-                        <label class="cursor-pointer flex items-center space-x-1.5">
-                            <input type="radio" name="cardTheme" value="blue" checked class="accent-blue-500">
-                            <span class="text-xs text-blue-300">Biru Klasik</span>
-                        </label>
-                        <label class="cursor-pointer flex items-center space-x-1.5">
-                            <input type="radio" name="cardTheme" value="amber" class="accent-amber-500">
-                            <span class="text-xs text-amber-300">Emas Kuning</span>
-                        </label>
-                        <label class="cursor-pointer flex items-center space-x-1.5">
-                            <input type="radio" name="cardTheme" value="cyan" class="accent-cyan-400">
-                            <span class="text-xs text-cyan-300">Cyan Elektrik</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Footer Buttons -->
-                <div class="pt-2 flex items-center justify-end space-x-3">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span>Terbangkan Aspirasi</span>
-                    </button>
-                </div>
-            </form>
+        <div class="absolute bottom-6 text-xs text-slate-500 font-medium">
+            &copy; 2026 KILAS MPK. All rights reserved.
         </div>
     </div>
 
-    <!-- Detail Modal -->
-    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-slate-900 border border-blue-500/30 w-full max-w-md rounded-3xl p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-all" id="detailContent">
-            <div id="detailAccentHeader" class="absolute top-0 left-0 right-0 h-2 bg-amber-500"></div>
-
-            <div class="flex items-start justify-between mb-4 pt-2">
-                <div>
-                    <span id="detailCategory" class="inline-block px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-2">
-                        Fasilitas
-                    </span>
-                    <h3 id="detailAuthor" class="font-bold text-white text-base">Nama Siswa</h3>
-                    <p id="detailGrade" class="text-xs text-slate-400">Kelas 11</p>
-                </div>
-                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+    <!-- ================= MODAL KONFIRMASI HAPUS (KUSTOM REPLACEMENT CONFIRM) ================= -->
+    <div id="confirmDeleteModal" class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100 text-center">
+            <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-xl mx-auto mb-3 border border-rose-200">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-
-            <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800 my-4">
-                <p id="detailText" class="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
-                    Isi aspirasi lengkap...
-                </p>
-            </div>
-
-            <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
-                <div class="flex items-center space-x-1">
-                    <i class="fa-regular fa-clock"></i>
-                    <span id="detailTime">Baru saja</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="detailDeleteBtn" onclick="requestDeleteFromDetail()" class="hidden bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl border border-red-500/30 transition text-xs items-center gap-1.5 shadow">
-                        <i class="fa-solid fa-trash-can"></i>
-                        <span>Hapus</span>
-                    </button>
-                    <button id="detailUpvoteBtn" onclick="upvoteCurrentDetail()" class="flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md hover:opacity-90">
-                        <i class="fa-solid fa-thumbs-up"></i>
-                        <span id="detailVoteCount">0 Dukungan</span>
-                    </button>
-                </div>
+            <h3 class="text-lg font-extrabold text-slate-900 mb-1">Konfirmasi Hapus</h3>
+            <p id="confirmDeleteMessage" class="text-xs text-slate-500 mb-6">Apakah Anda yakin ingin menghapus item ini secara permanen?</p>
+            <div class="flex gap-3">
+                <button type="button" onclick="closeConfirmModal()" class="w-1/2 py-2.5 rounded-xl border border-slate-300 font-semibold text-xs text-slate-700 hover:bg-slate-100 transition">Batal</button>
+                <button type="button" id="confirmDeleteSubmitBtn" class="w-1/2 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition">Hapus</button>
             </div>
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
-    <div id="adminModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-slate-900 border border-red-500/30 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-all" id="adminModalContent">
-            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 to-amber-500"></div>
+    <!-- ================= MODAL LOGIN ADMIN MPK ================= -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100 text-left">
             
-            <div class="flex items-center justify-between mb-4 pt-1">
-                <div class="flex items-center space-x-2 text-red-400">
-                    <i class="fa-solid fa-user-shield text-xl"></i>
-                    <h3 class="font-bold text-white text-base">Login Admin MPK</h3>
-                </div>
-                <button onclick="closeAdminModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+            <button onclick="closeAdminLoginModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4 border border-blue-200">
+                <i class="fa-solid fa-user-shield"></i>
             </div>
 
-            <p class="text-xs text-slate-400 mb-4">Masukkan kata sandi pengurus MPK untuk mengaktifkan mode moderasi dan menghapus aspirasi tidak pantas.</p>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-1">Login Admin MPK</h3>
+            <p class="text-xs text-slate-500 mb-6">Akses khusus pengurus MPK untuk mengedit artikel & moderasi aspirasi.</p>
 
             <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Kata Sandi Admin</label>
-                    <input type="password" id="inputAdminPass" placeholder="Masukkan password..." required class="w-full bg-slate-800 border border-slate-700 text-white text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-red-400 transition placeholder-slate-500">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+                    <input type="text" id="adminUsername" required placeholder="Masukkan username admin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition">
                 </div>
-                <p id="adminErrorMsg" class="hidden text-[11px] text-red-400 font-semibold"><i class="fa-solid fa-circle-exclamation mr-1"></i>Kata sandi salah!</p>
-                
-                <div class="flex items-center justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeAdminModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition">
-                        Batal
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="adminPassword" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center justify-center gap-2 mt-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Masuk Administrator</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL ABOUT MPK & STRUKTUR ORGANISASI ================= -->
+    <div id="aboutMpkModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative border border-slate-100">
+            
+            <button onclick="closeAboutMPK()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center max-w-2xl mx-auto mb-8 pt-2">
+                <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-semibold text-xs uppercase tracking-wider">Tentang Kami</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 mb-4">Majelis Perwakilan Kelas (MPK)</h2>
+                <div class="p-4 sm:p-5 bg-blue-50/70 border border-blue-100 rounded-2xl text-slate-700 text-sm sm:text-base leading-relaxed font-medium">
+                    MPK adalah sebuah organisasi resmi di SMAN 14 KAB.TANGERANG yang berfungsi sebagai wadah aspirasi dan jembatan legislatif!
+                </div>
+            </div>
+
+            <div class="border-t border-slate-200 pt-8 mb-6 text-center">
+                <h3 class="text-xl font-bold text-slate-800">Struktur Pengurus MPK</h3>
+                <p class="text-xs text-slate-500">SMAN 14 KAB. TANGERANG</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Slot 1 -->
+                <div class="p-5 rounded-2xl bg-gradient-to-b from-blue-50 to-slate-50 border border-blue-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-blue-500 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-ketua-wakil.jpg" alt="Ketua & Wakil" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-user-group text-3xl text-blue-400\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-600 text-white mb-2">Slot 1</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ketua & Wakil Ketua</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Ketua & Wakil]</p>
+                </div>
+                <!-- Slot 2 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-slate-300 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-sekretaris.jpg" alt="Sekretaris" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-user text-3xl text-slate-400\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 mb-2">Slot 2</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Sekretaris</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Sekretaris]</p>
+                </div>
+                <!-- Slot 3 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-slate-300 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-bendahara.jpg" alt="Bendahara" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-user text-3xl text-slate-400\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 mb-2">Slot 3</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">Bendahara</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Bendahara]</p>
+                </div>
+                <!-- Slot 4 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-amber-400 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-komisi-a.jpg" alt="Komisi A" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-users text-3xl text-amber-500\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 mb-2">Slot 4</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">KOMISI A</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Anggota Komisi A]</p>
+                </div>
+                <!-- Slot 5 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-amber-400 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-komisi-b.jpg" alt="Komisi B" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-users text-3xl text-amber-500\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 mb-2">Slot 5</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">KOMISI B</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Anggota Komisi B]</p>
+                </div>
+                <!-- Slot 6 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 mb-3 border-2 border-amber-400 overflow-hidden flex items-center justify-center text-slate-400">
+                        <img src="foto-komisi-c.jpg" alt="Komisi C" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\'fa-solid fa-users text-3xl text-amber-500\'></i>';">
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 mb-2">Slot 6</span>
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base">KOMISI C</h4>
+                    <p class="text-xs text-slate-500 mt-1">[Nama Anggota Komisi C]</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="closeAboutMPK()" class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold text-sm transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN WEBSITE CONTENT (HOMEPAGE) ================= -->
+    <div id="mainContent" class="min-h-screen flex flex-col hidden opacity-0 transition-opacity duration-700">
+        
+        <!-- Navigation Bar -->
+        <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20 relative">
+                    
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="#beranda" class="text-blue-600 font-semibold text-sm hover:text-blue-700 transition">Beranda</a>
+                        <button onclick="openAboutMPK()" class="text-slate-600 font-medium text-sm hover:text-blue-600 transition">About MPK</button>
+                    </div>
+
+                    <div class="flex items-center gap-3 cursor-pointer mx-auto md:absolute md:left-1/2 md:-translate-x-1/2" onclick="scrollToTop()">
+                        <div class="text-center md:text-left">
+                            <span class="text-xl font-black tracking-tight text-slate-900 block leading-none">KILAS</span>
+                            <span class="text-[10px] font-semibold text-amber-600 uppercase tracking-widest block mt-0.5">Managed by MPK</span>
+                        </div>
+                    </div>
+
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="#pengumuman" class="text-slate-600 font-medium text-sm hover:text-blue-600 transition">Pengumuman</a>
+                        <a href="#kontak" class="text-slate-600 font-medium text-sm hover:text-blue-600 transition">Kontak</a>
+                        
+                        <!-- Admin Login / Logout Badge -->
+                        <div id="adminNavBadge" class="flex items-center">
+                            <button onclick="openAdminLoginModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock text-slate-500"></i>
+                                <span>Login Admin</span>
+                            </button>
+                        </div>
+
+                        <button onclick="openAspirasiModal()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 text-sm font-bold shadow-md shadow-amber-500/20 transition flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Kirim Aspirasi</span>
+                        </button>
+                    </div>
+
+                    <div class="md:hidden flex items-center absolute right-0">
+                        <button onclick="toggleMobileMenu()" class="text-slate-700 p-2 rounded-lg hover:bg-slate-100 focus:outline-none">
+                            <i id="menuIcon" class="fa-solid fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Drawer -->
+            <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
+                <a href="#beranda" onclick="toggleMobileMenu()" class="block py-2 px-3 text-base font-semibold text-blue-600 rounded-lg bg-blue-50">Beranda</a>
+                <button onclick="openAboutMPK(); toggleMobileMenu();" class="block w-full text-left py-2 px-3 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">About MPK</button>
+                <a href="#pengumuman" onclick="toggleMobileMenu()" class="block py-2 px-3 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Pengumuman</a>
+                <a href="#kontak" onclick="toggleMobileMenu()" class="block py-2 px-3 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Kontak</a>
+                <div id="mobileAdminBadge" class="pt-1">
+                    <button onclick="openAdminLoginModal(); toggleMobileMenu();" class="w-full text-left py-2 px-3 text-sm font-medium text-slate-700 border rounded-lg flex items-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Login Admin MPK
                     </button>
-                    <button type="submit" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-lg shadow-red-600/30 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-unlock"></i>
-                        <span>Masuk Admin</span>
+                </div>
+                <div class="pt-2">
+                    <button onclick="openAspirasiModal(); toggleMobileMenu();" class="block w-full py-3 bg-amber-500 text-slate-900 font-bold rounded-xl text-center shadow">
+                        Kirim Aspirasi
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Banner Section -->
+        <section id="beranda" class="relative py-12 sm:py-20 bg-gradient-to-b from-blue-50/60 via-white to-slate-50 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-800 text-xs sm:text-sm font-semibold mb-6">
+                            <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
+                            Portal Informasi Resmi MPK
+                        </div>
+                        
+                        <p class="text-slate-700 text-base sm:text-xl font-medium mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                            KILAS (Kanal Informasi & Layanan Aspirasi Sekolah) adalah sebuah kanal informasi & layanan aspirasi digital yang dikelola dan disusun oleh pengurus MPK Smanera 2027-2028
+                        </p>
+
+                        <div class="flex flex-col gap-4 max-w-xl mx-auto lg:mx-0 mb-8">
+                            <button onclick="openAspirasiModal()" class="group relative w-full py-5 px-6 rounded-3xl border-4 border-amber-400 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 hover:text-amber-700 transition-all duration-300 transform hover:-translate-y-1 shadow-xl shadow-amber-500/10 flex items-center justify-center gap-3">
+                                <i class="fa-solid fa-paper-plane text-2xl text-amber-500 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-xl sm:text-2xl font-black uppercase tracking-wide">KIRIM ASPIRASI</span>
+                                <i class="fa-solid fa-chevron-right text-sm opacity-80"></i>
+                            </button>
+
+                            <div class="w-full">
+                                <button onclick="openAboutMPK()" class="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-50 border-2 border-blue-200 hover:border-blue-400 text-slate-800 font-bold text-base shadow-sm transition-all duration-300 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-circle-info text-blue-600 text-lg"></i>
+                                    <span>About MPK & Struktur Pengurus</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-amber-500 rounded-3xl blur-2xl opacity-20 animate-pulse-slow"></div>
+                            <div class="relative bg-white rounded-3xl p-8 shadow-xl border border-slate-100 text-center">
+                                <div class="w-48 h-48 mx-auto mb-6 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+                                    <img src="logo-kilas.png" alt="Logo KILAS Resmi" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/400x400/0f52ba/ffffff?text=Logo+KILAS';">
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-1">Logo Resmi KILAS</h3>
+                                <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-4">Simbol Sinergi & Dinamika Siswa</p>
+                                <div class="inline-block px-4 py-1.5 rounded-lg bg-amber-50 border border-amber-200/60 text-amber-800 text-xs font-semibold">
+                                    MANAGED BY MPK
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Announcements / News Section -->
+        <section id="pengumuman" class="py-16 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                    <div>
+                        <h2 class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Kabar Terbaru</h2>
+                        <p class="text-3xl font-extrabold text-slate-900">Pengumuman & Wawasan KILAS</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex items-center gap-3">
+                        <div id="adminNewsBtnContainer" class="hidden">
+                            <button onclick="openArticleModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i> Tambah Berita Baru
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="articlesGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Articles rendered via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="kontak" class="mt-auto bg-slate-900 text-white pt-12 pb-8 border-t border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+                    <div class="md:col-span-2">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div>
+                                <span class="text-xl font-extrabold text-white">KILAS</span>
+                                <span class="text-[10px] block text-amber-400 font-semibold tracking-wider">MANAGED BY MPK</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-400 text-sm max-w-sm leading-relaxed mb-4">
+                            KILAS adalah portal resmi informasi dan aspirasi siswa yang dikelola sepenuhnya oleh Majelis Perwakilan Kelas (MPK).
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4">Navigasi Cepat</h4>
+                        <ul class="space-y-2 text-sm text-slate-400">
+                            <li><a href="#beranda" class="hover:text-white transition">Beranda</a></li>
+                            <li><button onclick="openAboutMPK()" class="hover:text-white transition">Tentang MPK</button></li>
+                            <li><a href="#pengumuman" class="hover:text-white transition">Pengumuman</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4">FIND US</h4>
+                        <div class="space-y-3 text-sm text-slate-400">
+                            <a href="https://instagram.com/mpkosissman14kab_tgr" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-amber-400 transition">
+                                <i class="fa-brands fa-instagram text-pink-500 text-base"></i> @mpkosissman14kab_tgr
+                            </a>
+                            <a href="https://instagram.com/kilasmanera" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-amber-400 transition">
+                                <i class="fa-brands fa-instagram text-pink-500 text-base"></i> @kilasmanera
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                    <p>&copy; 2026 KILAS - Managed by MPK. All Rights Reserved.</p>
+                    <div class="flex gap-4 items-center">
+                        <button onclick="openAdminLoginModal()" class="hover:text-slate-300 text-xs">
+                            Admin Login
+                        </button>
+                        <span>•</span>
+                        <button onclick="showWelcomeScreen()" class="hover:text-slate-300 text-xs underline">
+                            Layar Sambutan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700">
+        <i class="fa-solid fa-circle-info text-blue-400"></i>
+        <span id="toastMsg" class="text-sm font-medium">Pesan notifikasi</span>
+    </div>
+
+    <!-- ================= MODAL TAMBAH / EDIT ARTIKEL (ADMIN ONLY) ================= -->
+    <div id="articleModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100">
+            <button onclick="closeArticleModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h3 id="articleModalTitle" class="text-xl font-extrabold text-slate-900 mb-4">Tambah Berita / Pengumuman</h3>
+            
+            <form onsubmit="handleArticleSubmit(event)" class="space-y-4">
+                <input type="hidden" id="articleId">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Judul Pengumuman</label>
+                    <input type="text" id="articleTitle" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
+                        <input type="text" id="articleCategory" required placeholder="Musyawarah/Agenda" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
+                        <input type="text" id="articleDate" required placeholder="24 Oktober 2026" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Isi Berita / Ringkasan</label>
+                    <textarea id="articleContent" rows="4" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm outline-none transition resize-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeArticleModal()" class="w-1/3 py-2.5 rounded-xl border border-slate-300 font-semibold text-xs text-slate-700 hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="w-2/3 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Berita</span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Custom Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-slate-900 border border-red-500/40 w-full max-w-sm rounded-3xl p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-all" id="deleteModalContent">
-            <div class="text-center">
-                <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 mx-auto flex items-center justify-center text-xl mb-3">
-                    <i class="fa-solid fa-trash-can"></i>
+    <!-- ================= MODAL PILIHAN METODE ASPIRASI ================= -->
+    <div id="aspirasiChoiceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100 text-center">
+            
+            <button onclick="closeAspirasiModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-200">
+                <i class="fa-solid fa-comments"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Pilih Jalur Aspirasi</h3>
+            <p class="text-slate-600 text-sm mb-6">Bagaimana Anda ingin menyampaikan ide, saran, atau keluhan Anda hari ini?</p>
+
+            <div class="space-y-4">
+                <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" onclick="closeAspirasiModal()" class="flex items-center justify-between p-4 rounded-2xl border-2 border-slate-200 hover:border-blue-500 bg-slate-50 hover:bg-blue-50/50 transition group text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 group-hover:text-blue-600 transition">Kirim Langsung ke MPK</h4>
+                            <p class="text-xs text-slate-500">Mengisi formulir resmi via Google Form</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 group-hover:text-blue-600 transition"></i>
+                </a>
+
+                <button onclick="closeAspirasiModal(); openBulletinBoard();" class="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-amber-300 hover:border-amber-500 bg-amber-50/50 hover:bg-amber-100/50 transition group text-left">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition">
+                            <i class="fa-solid fa-note-sticky"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-bold text-slate-900 group-hover:text-amber-700 transition">MPK Bulletin Board</h4>
+                                <span class="bg-amber-200 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Interaktif</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Tempel catatan aspirasi di mading publik & lihat masukan siswa lain</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-amber-600 transition"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL MPK BULLETIN BOARD (MADING ASPIRASI) ================= -->
+    <div id="bulletinBoardModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md px-3 sm:px-6 py-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-amber-50/95 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl relative border-4 border-amber-700/30">
+            
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between shadow-md shrink-0 border-b border-amber-600/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-note-sticky"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold leading-tight text-amber-400">MPK Bulletin Board</h3>
+                        <p class="text-xs text-slate-400">Mading Digital Aspirasi & Suara Siswa SMANERA</p>
+                    </div>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1">Hapus Aspirasi Ini?</h3>
-                <p class="text-xs text-slate-400 mb-5">Tindakan ini tidak dapat dibatalkan. Aspirasi akan terhapus secara permanen untuk semua siswa.</p>
+                <div class="flex items-center gap-3">
+                    <button onclick="openPostModal()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 rounded-xl font-bold text-xs sm:text-sm shadow-md flex items-center gap-2 transition">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Tempel Aspirasi</span>
+                    </button>
+                    <button onclick="closeBulletinBoard()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-8 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px] bg-amber-100/60">
                 
-                <div class="flex items-center justify-center space-x-3">
-                    <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition">
-                        Batal
-                    </button>
-                    <button onclick="executeDelete()" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-lg shadow-red-600/30 transition">
-                        Ya, Hapus Sekarang
-                    </button>
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white/70 backdrop-blur-sm p-3 rounded-2xl border border-amber-200/80 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider ml-1">Tampilkan:</span>
+                        <button id="filterAllBtn" onclick="filterNotes('all')" class="px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs shadow-sm">Semua Aspirasi</button>
+                        <button id="filterMineBtn" onclick="filterNotes('mine')" class="px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 font-semibold text-xs border border-slate-200">Aspirasi Saya</button>
+                    </div>
+                    <span id="noteCountBadge" class="text-xs text-amber-900 font-bold bg-amber-200/80 px-3 py-1 rounded-full">0 Catatan Tertempel</span>
+                </div>
+
+                <div id="notesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Notes injected by JavaScript -->
+                </div>
+
+                <div id="emptyNotesState" class="hidden text-center py-16 px-4">
+                    <div class="w-20 h-20 bg-amber-200/60 text-amber-700 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                        <i class="fa-regular fa-folder-open"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800">Belum ada aspirasi di sini</h4>
+                    <p class="text-xs text-slate-600 mt-1 max-w-sm mx-auto">Jadilah yang pertama menyampaikan pesan atau ide di bulletin board sekolah!</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 border border-amber-400 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-none">
-        <div id="toastIcon" class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
-            <i class="fa-solid fa-check"></i>
-        </div>
-        <div>
-            <p id="toastTitle" class="font-bold text-xs text-white">Sukses</p>
-            <p id="toastMessage" class="text-[11px] text-slate-300">Pesan tersampaikan.</p>
+    <!-- ================= MODAL BUAT CATATAN MADING BARU ================= -->
+    <div id="postNoteModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 backdrop-blur-md px-4 py-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-100">
+            
+            <button onclick="closePostModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <h3 class="text-xl font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-amber-500"></i>
+                <span>Tulis Aspirasi Baru</span>
+            </h3>
+            <p class="text-xs text-slate-500 mb-5">Pesan akan ditampilkan di MPK Bulletin Board secara publik.</p>
+
+            <form onsubmit="handlePostSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama / Kelas (Boleh Anonim)</label>
+                    <input type="text" id="noteAuthor" placeholder="Contoh: Anonim / X-2 / Budi XI-3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 text-sm outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Aspirasi</label>
+                    <select id="noteCategory" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 text-sm outline-none transition bg-white">
+                        <option value="Fasilitas">Fasilitas Sekolah</option>
+                        <option value="Kegiatan / Event">Kegiatan / Event</option>
+                        <option value="Akademik">Akademik & Kelas</option>
+                        <option value="Kritik & Saran">Kritik & Saran umum</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Warna Kertas Mading</label>
+                    <div class="flex items-center gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="noteColor" value="yellow" checked class="peer sr-only">
+                            <span class="w-8 h-8 rounded-full bg-amber-200 border-2 border-transparent peer-checked:border-slate-800 peer-checked:scale-110 flex items-center justify-center block transition"></span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="noteColor" value="blue" class="peer sr-only">
+                            <span class="w-8 h-8 rounded-full bg-sky-200 border-2 border-transparent peer-checked:border-slate-800 peer-checked:scale-110 flex items-center justify-center block transition"></span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="noteColor" value="green" class="peer sr-only">
+                            <span class="w-8 h-8 rounded-full bg-emerald-200 border-2 border-transparent peer-checked:border-slate-800 peer-checked:scale-110 flex items-center justify-center block transition"></span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="noteColor" value="pink" class="peer sr-only">
+                            <span class="w-8 h-8 rounded-full bg-rose-200 border-2 border-transparent peer-checked:border-slate-800 peer-checked:scale-110 flex items-center justify-center block transition"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Isi Aspirasi</label>
+                    <textarea id="noteContent" rows="4" required placeholder="Tuliskan ide, harapan, atau keluhan kamu secara sopan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 text-sm outline-none transition resize-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closePostModal()" class="w-1/3 py-2.5 rounded-xl border border-slate-300 font-semibold text-xs text-slate-700 hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="w-2/3 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Tempelkan di Board</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-800/80 bg-slate-950/60 backdrop-blur">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p>© 2026 KILAS SMANERA - Kanal Informasi & Layanan Aspirasi Siswa SMANERA</p>
-            <p class="flex items-center gap-1">
-                <span>Dikelola secara terbuka oleh MPK SMANERA</span>
-                <i class="fa-solid fa-heart text-amber-500"></i>
-            </p>
-        </div>
-    </footer>
+    <!-- JavaScript Logic -->
+    <script>
+        // List Kata Kasar & SARA untuk Pemfilteran Otomatis
+        const badWordsList = [
+            "anjing", "babi", "kunyuk", "bajingan", "asusila", "kontol", "memek", 
+            "bangsat", "goblok", "tolol", "kampang", "pante", "perek", "belegug",
+            "kafir", "sara", "lonte", "bego", "pantat", "titit", "jancok", "pantek"
+        ];
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, updateDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Hash SHA-256 Terenkripsi untuk Kredensial Admin (Mencegah intip teks langsung)
+        // Username Hash: mpksmanera | Password Hash: mpk20272028smanera
+        const HASH_ADMIN_USER = "f5fbfdd558b3c9b7e732ff7ea4ad21074a38fa1b4ac2e49c7bc29929dd5eaec1";
+        const HASH_ADMIN_PASS = "a61da5cdfa48151f7bb9ca25b2dd73edaa29dbfa057bb0eb1f1737be59eeff1e";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'kilas-smanera-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined'
-            ? JSON.parse(__firebase_config)
-            : {
-                apiKey: "AIzaSyC4gu2r8tSuMo59-ToPJQByblaskbrOOyY",
-                authDomain: "kilas-smanera.firebaseapp.com",
-                projectId: "kilas-smanera",
-                storageBucket: "kilas-smanera.firebasestorage.app",
-                messagingSenderId: "833282330999",
-                appId: "1:833282330999:web:70e52d01b3e57e95f99172"
+        // Implementasi Hashing SHA-256 Murni (Fallback jika crypto.subtle tidak aktif/di-block lingkungan iframe)
+        function jsSha256(str) {
+            function rightRotate(value, amount) {
+                return (value >>> amount) | (value << (32 - amount));
+            }
+            var mathPow = Math.pow;
+            var maxWord = mathPow(2, 32);
+            var lengthProperty = 'length';
+            var i, j;
+            var result = '';
+            var words = [];
+            var asciiBitLength = str[lengthProperty] * 8;
+            var hash = jsSha256.h = jsSha256.h || [];
+            var k = jsSha256.k = jsSha256.k || [];
+            var primeCounter = k[lengthProperty];
+            var isComposite = {};
+            for (var candidate = 2; primeCounter < 64; candidate++) {
+                if (!isComposite[candidate]) {
+                    for (i = 0; i < 300; i += candidate) {
+                        isComposite[i] = candidate;
+                    }
+                    hash[primeCounter] = (mathPow(candidate, .5) * maxWord) | 0;
+                    k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+                }
+            }
+            str += '\x80';
+            while (str[lengthProperty] % 64 !== 56) str += '\x00';
+            for (i = 0; i < str[lengthProperty]; i++) {
+                j = str.charCodeAt(i);
+                if (j >> 8) return;
+                words[i >> 2] |= j << ((3 - i % 4) * 8);
+            }
+            words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
+            words[words[lengthProperty]] = (asciiBitLength);
+            for (j = 0; j < words[lengthProperty];) {
+                var w = words.slice(j, j += 16);
+                var oldHash = hash;
+                hash = hash.slice(0, 8);
+                for (i = 0; i < 64; i++) {
+                    var w15 = w[i - 15], w2 = w[i - 2];
+                    var a = hash[0], e = hash[4];
+                    var temp1 = hash[7]
+                        + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+                        + ((e & hash[5]) ^ ((~e) & hash[6]))
+                        + k[i]
+                        + (w[i] = (i < 16) ? w[i] : (
+                            w[i - 16]
+                            + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3))
+                            + w[i - 7]
+                            + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+                        ) | 0);
+                    var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+                        + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+                    hash = [(temp1 + temp2) | 0].concat(hash);
+                    hash[4] = (hash[4] + temp1) | 0;
+                }
+                for (i = 0; i < 8; i++) {
+                    hash[i] = (hash[i] + oldHash[i]) | 0;
+                }
+            }
+            for (i = 0; i < 8; i++) {
+                for (j = 3; j >= 0; j--) {
+                    var b = (hash[i] >> (j * 8)) & 255;
+                    result += (b < 16 ? 0 : '') + b.toString(16);
+                }
+            }
+            return result;
+        }
+
+        // Helper utama untuk Mengubah Teks ke Hash SHA-256 (Mendukung Web Crypto & JS Fallback)
+        async function hashString(str) {
+            try {
+                if (window.crypto && window.crypto.subtle) {
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(str);
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                }
+            } catch (e) {
+                console.warn("Menggunakan JS Fallback SHA-256");
+            }
+            return jsSha256(str);
+        }
+
+        // Variable callback untuk modal hapus
+        let pendingDeleteAction = null;
+
+        function openConfirmModal(message, onConfirm) {
+            document.getElementById('confirmDeleteMessage').innerText = message;
+            pendingDeleteAction = onConfirm;
+            const modal = document.getElementById('confirmDeleteModal');
+            document.getElementById('confirmDeleteSubmitBtn').onclick = () => {
+                if (pendingDeleteAction) pendingDeleteAction();
+                closeConfirmModal();
             };
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
 
-        let app, auth, db;
-        let currentUser = null;
-        let isCloudConnected = false;
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirmDeleteModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                pendingDeleteAction = null;
+            }, 300);
+        }
 
-        /* Application Global State */
-        let aspirations = [];
-        let activeCategory = 'All';
-        let searchQuery = '';
-        let currentView = 'floating'; // 'floating' | 'grid'
-        let currentDetailId = null;
+        // Default Articles / News
+        let defaultArticles = [
+            {
+                id: 1,
+                title: "Hasil Sidang Pleno MPK Semester Ganjil",
+                category: "Musyawarah",
+                date: "24 Oktober 2026",
+                content: "Pembahasan evaluasi program kerja OSIS dan penyerahan lembar aspirasi dari perwakilan kelas."
+            },
+            {
+                id: 2,
+                title: "Pembukaan Kotak Aspirasi Digital KILAS",
+                category: "Aspirasi",
+                date: "20 Oktober 2026",
+                content: "Seluruh siswa kini dapat mengirimkan masukan secara langsung melaui platform terpadu ini."
+            },
+            {
+                id: 3,
+                title: "Persiapan Pemilihan Ketua OSIS & MPK",
+                category: "Agenda",
+                date: "15 Oktober 2026",
+                content: "Tahapan pendaftaran dan verifikasi berkas calon ketua resmi dibuka minggu depan."
+            }
+        ];
 
-        /* Track local upvoted aspirations to enforce 1 vote per device */
-        let upvotedAspirations = new Set(JSON.parse(localStorage.getItem('kilas_upvoted_ids') || '[]'));
+        // Initial Dummy Data for Bulletin Board
+        let defaultNotes = [
+            {
+                id: 1,
+                author: "Anonim X-4",
+                category: "Fasilitas",
+                color: "yellow",
+                content: "Mohon diperbaiki kipas angin di ruang laboratorium komputer 2 yang mati. Suasana kelas jadi agak panas saat jam praktikum.",
+                likes: 12,
+                date: "Hari ini, 09:15",
+                isMine: false,
+                isFlagged: false
+            },
+            {
+                id: 2,
+                author: "Siswa XI IPA 1",
+                category: "Kegiatan / Event",
+                color: "pink",
+                content: "Bisa tambahkan lomba e-sports MLBB/Valorant di event Porseni semester depan? Dijamin meriah!",
+                likes: 28,
+                date: "Kemarin, 14:20",
+                isMine: false,
+                isFlagged: false
+            },
+            {
+                id: 3,
+                author: "Pengurus MPK",
+                category: "Kritik & Saran",
+                color: "blue",
+                content: "Terima kasih untuk masukan teman-teman semua! Setiap aspirasi di sini akan direkap dan disampaikan dalam rapat rutin bersama pembina.",
+                likes: 45,
+                date: "23 Okt 2026",
+                isMine: false,
+                isFlagged: false
+            }
+        ];
 
-        /* Admin Moderation State */
-        let isAdminLoggedIn = false;
-        const ADMIN_SECRET_PASS = 'mpk20272028smanera';
-        let pendingDeleteId = null;
+        let currentFilter = 'all';
 
-        /* Physics Floating Canvas Engine State */
-        let physicsNodes = [];
-        let animationFrameId = null;
-        let isDraggingCard = false;
-        let draggedNode = null;
-        let dragOffsetX = 0;
-        let dragOffsetY = 0;
+        // Check Admin Status
+        function isAdminLoggedIn() {
+            return sessionStorage.getItem('kilas_admin_logged') === 'true';
+        }
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            setupPhysicsCanvas();
-            renderStats();
+        // Check Bad Words / SARA
+        function containsBadWords(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            return badWordsList.some(word => lowerText.includes(word));
+        }
+
+        // Admin Login Handle dengan SHA-256 Verification & Auto Trim Spasi
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            
+            // Mengambil nilai, membersihkan spasi awal/akhir
+            const uInput = document.getElementById('adminUsername').value.trim();
+            const pInput = document.getElementById('adminPassword').value.trim();
+
+            if (!uInput || !pInput) {
+                showToast("Username dan Password tidak boleh kosong!");
+                return;
+            }
+
+            // Normalisasi username ke lowercase
+            const uNormalized = uInput.toLowerCase();
 
             try {
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
+                const inputUserHash = await hashString(uNormalized);
+                const inputPassHash = await hashString(pInput);
 
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    const res = await signInWithCustomToken(auth, __initial_auth_token);
-                    currentUser = res.user;
+                if (inputUserHash === HASH_ADMIN_USER && inputPassHash === HASH_ADMIN_PASS) {
+                    sessionStorage.setItem('kilas_admin_logged', 'true');
+                    closeAdminLoginModal();
+                    showToast("Berhasil login sebagai Admin MPK!");
+                    updateAdminUI();
+                    renderArticles();
+                    if (!document.getElementById('bulletinBoardModal').classList.contains('hidden')) {
+                        renderNotes();
+                    }
                 } else {
-                    const res = await signInAnonymously(auth);
-                    currentUser = res.user;
-                }
-
-                if (currentUser) {
-                    isCloudConnected = true;
-                    setupRealtimeListener();
-                } else {
-                    loadLocalStorage();
+                    showToast("Username atau Password Admin salah!");
                 }
             } catch (err) {
-                console.warn("Cloud connection error, falling back to local storage:", err);
-                isCloudConnected = false;
-                loadLocalStorage();
-            }
-
-            window.addEventListener('resize', handleResize);
-        });
-
-        function setupRealtimeListener() {
-            if (!currentUser || !db) return;
-
-            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'aspirations');
-
-            onSnapshot(colRef, (snapshot) => {
-                const cloudItems = [];
-                snapshot.forEach((docSnap) => {
-                    cloudItems.push({
-                        id: docSnap.id,
-                        ...docSnap.data()
-                    });
-                });
-
-                // Sort descending by creation timestamp
-                cloudItems.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-                aspirations = cloudItems;
-                saveLocalStorage();
-                renderView();
-            }, (error) => {
-                console.error("Firestore real-time error:", error);
-                loadLocalStorage();
-            });
-        }
-
-        function loadLocalStorage() {
-            const saved = localStorage.getItem('kilas_aspirations');
-            if (saved) {
-                try {
-                    aspirations = JSON.parse(saved);
-                } catch (e) {
-                    aspirations = [];
-                }
-            } else {
-                aspirations = [];
-            }
-            renderView();
-        }
-
-        function saveLocalStorage() {
-            localStorage.setItem('kilas_aspirations', JSON.stringify(aspirations));
-        }
-
-        function renderFloatingDOMNodes() {
-            const container = document.getElementById('floatingContainer');
-            container.innerHTML = '';
-
-            if (physicsNodes.length === 0) {
-                container.innerHTML = `
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                        <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-3">
-                            <i class="fa-solid fa-bullhorn"></i>
-                        </div>
-                        <p class="text-white font-bold text-base">Belum Ada Aspirasi Siswa</p>
-                        <p class="text-xs text-slate-400 max-w-xs mt-1">Jadilah siswa pertama SMANERA yang mengirimkan aspirasi atau ide terbaikmu!</p>
-                        <button onclick="openModal()" class="mt-4 px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-xs rounded-xl hover:opacity-90 transition shadow-lg shadow-amber-500/20">
-                            + Kirim Aspirasi Pertama
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            physicsNodes.forEach(node => {
-                const asp = node.data;
-                const cardEl = document.createElement('div');
-                cardEl.id = `node-${node.id}`;
-                cardEl.className = `aspiration-card w-[240px] p-4 rounded-2xl border transition-shadow duration-300 ${getThemeStyle(asp.theme)}`;
-                cardEl.style.left = `${node.x}px`;
-                cardEl.style.top = `${node.y}px`;
-
-                const isVoted = upvotedAspirations.has(asp.id);
-                const voteBtnStyle = isVoted
-                    ? "bg-emerald-500 text-slate-950 font-extrabold border-emerald-400"
-                    : "bg-slate-900/80 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border-amber-500/30";
-
-                const adminDeleteBtnHtml = isAdminLoggedIn ? `
-                    <button onclick="event.stopPropagation(); promptDelete('${asp.id}')" class="w-6 h-6 rounded-lg bg-red-600 hover:bg-red-500 text-white flex items-center justify-center text-[10px] shadow transition" title="Hapus Aspirasi (Admin MPK)">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                ` : '';
-
-                cardEl.innerHTML = `
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-900/60 text-amber-300 border border-amber-400/20">
-                            ${asp.category}
-                        </span>
-                        <div class="flex items-center space-x-1.5">
-                            ${adminDeleteBtnHtml}
-                            <span class="text-[10px] text-slate-400">${asp.time || 'Baru'}</span>
-                        </div>
-                    </div>
-                    <p class="text-xs font-semibold text-white line-clamp-3 mb-3 leading-relaxed pointer-events-none">
-                        "${escapeHtml(asp.text)}"
-                    </p>
-                    <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
-                        <div class="truncate max-w-[120px]">
-                            <p class="font-bold text-amber-200 truncate">${escapeHtml(asp.name)}</p>
-                            <p class="text-[9px] text-slate-400 truncate">${escapeHtml(asp.grade)}</p>
-                        </div>
-                        <button onclick="event.stopPropagation(); upvote('${asp.id}')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-xl font-bold border transition ${voteBtnStyle}">
-                            <i class="fa-solid ${isVoted ? 'fa-check' : 'fa-thumbs-up'} text-[10px]"></i>
-                            <span>${asp.upvotes || 1}</span>
-                        </button>
-                    </div>
-                `;
-
-                cardEl.addEventListener('mouseenter', () => node.isHovered = true);
-                cardEl.addEventListener('mouseleave', () => node.isHovered = false);
-
-                cardEl.addEventListener('click', (e) => {
-                    if (!isDraggingCard) {
-                        openDetailModal(asp.id);
-                    }
-                });
-
-                cardEl.addEventListener('mousedown', (e) => startDrag(e, node));
-                cardEl.addEventListener('touchstart', (e) => startDrag(e.touches[0], node), { passive: true });
-
-                container.appendChild(cardEl);
-            });
-        }
-
-        function renderGridView() {
-            const wrapper = document.getElementById('gridWrapper');
-            const emptyState = document.getElementById('emptyGridState');
-            const filtered = getFilteredAspirations();
-
-            wrapper.innerHTML = '';
-
-            if (filtered.length === 0) {
-                wrapper.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-                return;
-            }
-
-            wrapper.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-
-            filtered.forEach(asp => {
-                const card = document.createElement('div');
-                card.className = `p-5 rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${getThemeStyle(asp.theme)} flex flex-col justify-between`;
-                
-                const isVoted = upvotedAspirations.has(asp.id);
-                const voteBtnStyle = isVoted
-                    ? "bg-emerald-500 text-slate-950 border border-emerald-400 cursor-default"
-                    : "bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 hover:opacity-90";
-
-                const adminDeleteBtnHtml = isAdminLoggedIn ? `
-                    <button onclick="promptDelete('${asp.id}')" class="px-2.5 py-1.5 rounded-xl bg-red-600/80 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1 shadow" title="Hapus Aspirasi (Admin MPK)">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                ` : '';
-
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-extrabold uppercase px-2.5 py-1 rounded-lg bg-slate-900/80 text-amber-300 border border-amber-400/30">
-                                ${asp.category}
-                            </span>
-                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${asp.time || 'Baru'}</span>
-                        </div>
-                        <p class="text-sm font-medium text-slate-100 mb-4 leading-relaxed">
-                            "${escapeHtml(asp.text)}"
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-bold text-amber-200">${escapeHtml(asp.name)}</p>
-                            <p class="text-[10px] text-slate-400">${escapeHtml(asp.grade)}</p>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            ${adminDeleteBtnHtml}
-                            <button onclick="openDetailModal('${asp.id}')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
-                                Detail
-                            </button>
-                            <button onclick="upvote('${asp.id}')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1 shadow ${voteBtnStyle}">
-                                <i class="fa-solid ${isVoted ? 'fa-check' : 'fa-thumbs-up'}"></i>
-                                <span>${asp.upvotes || 1} ${isVoted ? 'Didukung' : ''}</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                wrapper.appendChild(card);
-            });
-        }
-
-        function setupPhysicsCanvas() {
-            const container = document.getElementById('floatingContainer');
-            const rect = container.getBoundingClientRect();
-            const width = rect.width || 800;
-            const height = rect.height || 520;
-
-            const filtered = getFilteredAspirations();
-
-            physicsNodes = filtered.map((asp) => {
-                const existing = physicsNodes.find(n => n.id === asp.id);
-                if (existing) {
-                    existing.data = asp;
-                    return existing;
-                }
-
-                const cardWidth = 240;
-                const cardHeight = 150;
-                const x = Math.random() * Math.max(10, width - cardWidth - 20) + 10;
-                const y = Math.random() * Math.max(10, height - cardHeight - 20) + 10;
-                
-                const vx = (Math.random() - 0.5) * 0.8;
-                const vy = (Math.random() - 0.5) * 0.8;
-
-                return {
-                    id: asp.id,
-                    data: asp,
-                    x: x,
-                    y: y,
-                    vx: vx === 0 ? 0.4 : vx,
-                    vy: vy === 0 ? 0.4 : vy,
-                    width: cardWidth,
-                    height: cardHeight,
-                    isHovered: false
-                };
-            });
-
-            renderFloatingDOMNodes();
-            startPhysicsLoop();
-        }
-
-        function startPhysicsLoop() {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-
-            function step() {
-                if (currentView === 'floating') {
-                    updatePhysicsPositions();
-                }
-                animationFrameId = requestAnimationFrame(step);
-            }
-            animationFrameId = requestAnimationFrame(step);
-        }
-
-        function updatePhysicsPositions() {
-            const container = document.getElementById('floatingContainer');
-            if (!container) return;
-            const bounds = container.getBoundingClientRect();
-
-            physicsNodes.forEach(node => {
-                if (draggedNode && draggedNode.id === node.id) return;
-                if (node.isHovered) return;
-
-                node.x += node.vx;
-                node.y += node.vy;
-
-                const maxX = bounds.width - node.width - 15;
-                const maxY = bounds.height - node.height - 15;
-
-                if (node.x <= 10) {
-                    node.x = 10;
-                    node.vx *= -1;
-                } else if (node.x >= maxX) {
-                    node.x = maxX;
-                    node.vx *= -1;
-                }
-
-                if (node.y <= 10) {
-                    node.y = 10;
-                    node.vy *= -1;
-                } else if (node.y >= maxY) {
-                    node.y = maxY;
-                    node.vy *= -1;
-                }
-
-                const el = document.getElementById(`node-${node.id}`);
-                if (el) {
-                    el.style.left = `${node.x}px`;
-                    el.style.top = `${node.y}px`;
-                }
-            });
-        }
-
-        function startDrag(e, node) {
-            isDraggingCard = false;
-            draggedNode = node;
-            const cardEl = document.getElementById(`node-${node.id}`);
-            const rect = cardEl.getBoundingClientRect();
-
-            dragOffsetX = e.clientX - rect.left;
-            dragOffsetY = e.clientY - rect.top;
-
-            const onMove = (moveEvent) => {
-                isDraggingCard = true;
-                const evt = moveEvent.touches ? moveEvent.touches[0] : moveEvent;
-                const containerRect = document.getElementById('floatingContainer').getBoundingClientRect();
-
-                let newX = evt.clientX - containerRect.left - dragOffsetX;
-                let newY = evt.clientY - containerRect.top - dragOffsetY;
-
-                newX = Math.max(5, Math.min(newX, containerRect.width - node.width - 5));
-                newY = Math.max(5, Math.min(newY, containerRect.height - node.height - 5));
-
-                node.x = newX;
-                node.y = newY;
-
-                cardEl.style.left = `${newX}px`;
-                cardEl.style.top = `${newY}px`;
-            };
-
-            const onEnd = () => {
-                document.removeEventListener('mousemove', onMove);
-                document.removeEventListener('mouseup', onEnd);
-                document.removeEventListener('touchmove', onMove);
-                document.removeEventListener('touchend', onEnd);
-                
-                setTimeout(() => {
-                    draggedNode = null;
-                }, 50);
-            };
-
-            document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup', onEnd);
-            document.addEventListener('touchmove', onMove, { passive: true });
-            document.addEventListener('touchend', onEnd);
-        }
-
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            try {
-                const nameInput = document.getElementById('inputName').value.trim();
-                const gradeInput = document.getElementById('inputGrade').value;
-                const categoryEl = document.querySelector('input[name="categoryOption"]:checked');
-                const themeEl = document.querySelector('input[name="cardTheme"]:checked');
-                const textInput = document.getElementById('inputText').value.trim();
-
-                if (!textInput || !gradeInput) {
-                    showToast('Gagal', 'Mohon lengkapi pilihan kelas dan pesan aspirasi Anda.');
-                    return;
-                }
-
-                const categoryInput = categoryEl ? categoryEl.value : 'Fasilitas';
-                const themeInput = themeEl ? themeEl.value : 'blue';
-                const newId = 'asp-' + Date.now();
-
-                const newAspiration = {
-                    id: newId,
-                    name: nameInput || 'Siswa Anonim',
-                    grade: gradeInput,
-                    category: categoryInput,
-                    text: textInput,
-                    upvotes: 1,
-                    theme: themeInput,
-                    time: 'Baru saja',
-                    createdAt: Date.now()
-                };
-
-                /* Auto-vote for own created aspiration */
-                upvotedAspirations.add(newId);
-                localStorage.setItem('kilas_upvoted_ids', JSON.stringify([...upvotedAspirations]));
-
-                if (isCloudConnected && currentUser && db) {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', newId);
-                    await setDoc(docRef, newAspiration);
-                } else {
-                    aspirations.unshift(newAspiration);
-                    saveLocalStorage();
-                    renderView();
-                }
-
-                activeCategory = 'All';
-                searchQuery = '';
-                const searchEl = document.getElementById('searchInput');
-                if (searchEl) searchEl.value = '';
-                const clearBtn = document.getElementById('clearSearchBtn');
-                if (clearBtn) clearBtn.classList.add('hidden');
-
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    if (btn.textContent.includes('Semua')) {
-                        btn.className = "category-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-amber-500 text-slate-950 shadow-md";
-                    } else {
-                        btn.className = "category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700";
-                    }
-                });
-
-                closeModal();
-                showToast('Aspirasi Diterbangkan! 🚀', 'Terima kasih, aspirasi kamu berhasil dipublikasikan secara real-time.');
-            } catch (err) {
-                console.error('Error submitting aspiration:', err);
-                showToast('Terjadi Kesalahan', 'Gagal mengirimkan aspirasi, silakan coba lagi.');
+                console.error("Login Error:", err);
+                showToast("Terjadi kesalahan teknis saat verifikasi login.");
             }
         }
 
-        async function upvote(id) {
-            if (upvotedAspirations.has(id)) {
-                showToast('Sudah Didukung! ⚠️', 'Kamu sudah memberikan dukungan untuk aspirasi ini sebelumnya.');
-                return;
-            }
-
-            const asp = aspirations.find(a => a.id === id);
-            if (!asp) return;
-
-            // Save to voted set and localStorage
-            upvotedAspirations.add(id);
-            localStorage.setItem('kilas_upvoted_ids', JSON.stringify([...upvotedAspirations]));
-
-            if (isCloudConnected && currentUser && db) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', id);
-                    await updateDoc(docRef, {
-                        upvotes: increment(1)
-                    });
-                } catch (e) {
-                    asp.upvotes = (asp.upvotes || 1) + 1;
-                    saveLocalStorage();
-                    renderView();
-                }
-            } else {
-                asp.upvotes = (asp.upvotes || 1) + 1;
-                saveLocalStorage();
-                renderView();
-            }
-
-            showToast('Dukungan Ditambahkan! 👍', `Kamu berhasil mendukung aspirasi dari ${asp.name}.`);
-        }
-
-        function promptDelete(id) {
-            pendingDeleteId = id;
-            const modal = document.getElementById('deleteModal');
-            const content = document.getElementById('deleteModalContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        async function executeDelete() {
-            if (!pendingDeleteId) return;
-
-            const targetId = pendingDeleteId;
-            closeDeleteModal();
-            closeDetailModal();
-
-            if (isCloudConnected && currentUser && db) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'aspirations', targetId);
-                    await deleteDoc(docRef);
-                } catch (e) {
-                    console.error("Cloud delete error:", e);
-                    aspirations = aspirations.filter(a => a.id !== targetId);
-                    saveLocalStorage();
-                    renderView();
-                }
-            } else {
-                aspirations = aspirations.filter(a => a.id !== targetId);
-                saveLocalStorage();
-                renderView();
-            }
-
-            showToast('Aspirasi Dihapus 🗑️', 'Aspirasi telah berhasil dihapus dari sistem oleh Admin MPK.');
-        }
-
-        function openAdminModal() {
-            document.getElementById('inputAdminPass').value = '';
-            document.getElementById('adminErrorMsg').classList.add('hidden');
-            const modal = document.getElementById('adminModal');
-            const content = document.getElementById('adminModalContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closeAdminModal() {
-            const modal = document.getElementById('adminModal');
-            const content = document.getElementById('adminModalContent');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('inputAdminPass').value;
-            if (pass === ADMIN_SECRET_PASS) {
-                isAdminLoggedIn = true;
-                closeAdminModal();
-                updateAdminUI();
-                renderView();
-                showToast('Login Admin Berhasil 🛡️', 'Mode moderasi MPK aktif. Anda dapat menghapus aspirasi.');
-            } else {
-                document.getElementById('adminErrorMsg').classList.remove('hidden');
-            }
-        }
-
-        function logoutAdmin() {
-            isAdminLoggedIn = false;
+        function handleAdminLogout() {
+            sessionStorage.removeItem('kilas_admin_logged');
+            showToast("Berhasil logout dari mode Admin.");
             updateAdminUI();
-            renderView();
-            showToast('Logout Admin', 'Mode moderasi dinonaktifkan.');
+            renderArticles();
+            if (!document.getElementById('bulletinBoardModal').classList.contains('hidden')) {
+                renderNotes();
+            }
         }
 
         function updateAdminUI() {
-            const badge = document.getElementById('adminBadgeContainer');
-            const btnLogin = document.getElementById('btnAdminLogin');
-            if (isAdminLoggedIn) {
-                badge.classList.remove('hidden');
-                badge.classList.add('flex');
-                btnLogin.classList.add('hidden');
+            const navBadge = document.getElementById('adminNavBadge');
+            const mobileAdminBadge = document.getElementById('mobileAdminBadge');
+            const newsBtn = document.getElementById('adminNewsBtnContainer');
+
+            if (isAdminLoggedIn()) {
+                navBadge.innerHTML = `
+                    <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-2.5 py-1 rounded-lg font-bold">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Admin Active</span>
+                        <button onclick="handleAdminLogout()" class="text-xs text-rose-600 hover:underline ml-1">Logout</button>
+                    </div>
+                `;
+                mobileAdminBadge.innerHTML = `
+                    <div class="p-2 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-800 flex justify-between items-center">
+                        <span>Status: Admin MPK</span>
+                        <button onclick="handleAdminLogout()" class="text-rose-600 underline">Logout</button>
+                    </div>
+                `;
+                newsBtn.classList.remove('hidden');
             } else {
-                badge.classList.add('hidden');
-                badge.classList.remove('flex');
-                btnLogin.classList.remove('hidden');
+                navBadge.innerHTML = `
+                    <button onclick="openAdminLoginModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-lock text-slate-500"></i>
+                        <span>Login Admin</span>
+                    </button>
+                `;
+                mobileAdminBadge.innerHTML = `
+                    <button onclick="openAdminLoginModal(); toggleMobileMenu();" class="w-full text-left py-2 px-3 text-sm font-medium text-slate-700 border rounded-lg flex items-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Login Admin MPK
+                    </button>
+                `;
+                newsBtn.classList.add('hidden');
             }
         }
 
-        function closeDeleteModal() {
-            const modal = document.getElementById('deleteModal');
-            const content = document.getElementById('deleteModalContent');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            pendingDeleteId = null;
+        // Modals Admin Login
+        function openAdminLoginModal() {
+            const modal = document.getElementById('adminLoginModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
         }
 
-        function openDetailModal(id) {
-            const asp = aspirations.find(a => a.id === id);
-            if (!asp) return;
+        function closeAdminLoginModal() {
+            const modal = document.getElementById('adminLoginModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
 
-            currentDetailId = id;
-            document.getElementById('detailCategory').textContent = asp.category;
-            document.getElementById('detailAuthor').textContent = asp.name;
-            document.getElementById('detailGrade').textContent = asp.grade;
-            document.getElementById('detailText').textContent = asp.text;
-            document.getElementById('detailTime').textContent = asp.time || 'Baru saja';
+        // Local Storage Accessors
+        function getStoredNotes() {
+            const stored = localStorage.getItem('kilas_bulletin_notes');
+            if (stored) {
+                try { return JSON.parse(stored); } catch(e) { return defaultNotes; }
+            }
+            localStorage.setItem('kilas_bulletin_notes', JSON.stringify(defaultNotes));
+            return defaultNotes;
+        }
 
-            const isVoted = upvotedAspirations.has(asp.id);
-            const upvoteBtn = document.getElementById('detailUpvoteBtn');
-            const voteCountEl = document.getElementById('detailVoteCount');
+        function getStoredArticles() {
+            const stored = localStorage.getItem('kilas_articles');
+            if (stored) {
+                try { return JSON.parse(stored); } catch(e) { return defaultArticles; }
+            }
+            localStorage.setItem('kilas_articles', JSON.stringify(defaultArticles));
+            return defaultArticles;
+        }
 
-            voteCountEl.textContent = `${asp.upvotes || 1} Dukungan ${isVoted ? '(Didukung)' : ''}`;
+        function getLikedNotes() {
+            const stored = localStorage.getItem('kilas_liked_notes');
+            if (stored) {
+                try { return JSON.parse(stored); } catch(e) { return []; }
+            }
+            return [];
+        }
 
-            if (isVoted) {
-                upvoteBtn.className = "flex items-center space-x-2 bg-emerald-500 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md cursor-default";
+        // Render Articles CRUD
+        function renderArticles() {
+            const grid = document.getElementById('articlesGrid');
+            const articles = getStoredArticles();
+            const admin = isAdminLoggedIn();
+
+            grid.innerHTML = articles.map(item => `
+                <article class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 bg-gradient-to-r from-blue-600 to-sky-500 flex items-center justify-center text-white relative">
+                            <i class="fa-solid fa-newspaper text-5xl opacity-40"></i>
+                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
+                                ${escapeHTML(item.category)}
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-slate-400 font-medium">${escapeHTML(item.date)}</span>
+                            <h3 class="text-lg font-bold text-slate-800 mt-1 mb-2">
+                                ${escapeHTML(item.title)}
+                            </h3>
+                            <p class="text-xs text-slate-600 line-clamp-3">
+                                ${escapeHTML(item.content)}
+                            </p>
+                        </div>
+                    </div>
+                    ${admin ? `
+                        <div class="px-6 pb-5 pt-2 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50/50">
+                            <button onclick="editArticle(${item.id})" class="px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button onclick="deleteArticle(${item.id})" class="px-3 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    ` : ''}
+                </article>
+            `).join('');
+        }
+
+        // Article Form Modal
+        function openArticleModal(article = null) {
+            const modal = document.getElementById('articleModal');
+            const title = document.getElementById('articleModalTitle');
+
+            if (article) {
+                title.innerText = "Edit Berita / Pengumuman";
+                document.getElementById('articleId').value = article.id;
+                document.getElementById('articleTitle').value = article.title;
+                document.getElementById('articleCategory').value = article.category;
+                document.getElementById('articleDate').value = article.date;
+                document.getElementById('articleContent').value = article.content;
             } else {
-                upvoteBtn.className = "flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl transition shadow-md hover:opacity-90";
+                title.innerText = "Tambah Berita Baru";
+                document.getElementById('articleId').value = '';
+                document.getElementById('articleTitle').value = '';
+                document.getElementById('articleCategory').value = 'Musyawarah';
+                document.getElementById('articleDate').value = '24 Oktober 2026';
+                document.getElementById('articleContent').value = '';
             }
 
-            const deleteBtn = document.getElementById('detailDeleteBtn');
-            if (isAdminLoggedIn) {
-                deleteBtn.classList.remove('hidden');
-                deleteBtn.classList.add('flex');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('articleModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function handleArticleSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('articleId').value;
+            const articles = getStoredArticles();
+
+            const newObj = {
+                id: id ? parseInt(id) : Date.now(),
+                title: document.getElementById('articleTitle').value.trim(),
+                category: document.getElementById('articleCategory').value.trim(),
+                date: document.getElementById('articleDate').value.trim(),
+                content: document.getElementById('articleContent').value.trim()
+            };
+
+            if (id) {
+                const idx = articles.findIndex(a => a.id === parseInt(id));
+                if (idx !== -1) articles[idx] = newObj;
             } else {
-                deleteBtn.classList.add('hidden');
-                deleteBtn.classList.remove('flex');
+                articles.unshift(newObj);
             }
 
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('detailContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
+            localStorage.setItem('kilas_articles', JSON.stringify(articles));
+            closeArticleModal();
+            renderArticles();
+            showToast(id ? "Berita berhasil diperbarui!" : "Berita baru berhasil dibuat!");
         }
 
-        function closeDetailModal() {
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('detailContent');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            currentDetailId = null;
+        function editArticle(id) {
+            const articles = getStoredArticles();
+            const item = articles.find(a => a.id === id);
+            if (item) openArticleModal(item);
         }
 
-        function requestDeleteFromDetail() {
-            if (currentDetailId) {
-                promptDelete(currentDetailId);
-            }
-        }
-
-        function upvoteCurrentDetail() {
-            if (currentDetailId) {
-                upvote(currentDetailId);
-                const asp = aspirations.find(a => a.id === currentDetailId);
-                if (asp) {
-                    document.getElementById('detailVoteCount').textContent = `${asp.upvotes || 1} Dukungan`;
-                }
-            }
-        }
-
-        function getThemeStyle(theme) {
-            switch(theme) {
-                case 'amber':
-                    return 'bg-gradient-to-br from-amber-950/40 via-slate-900/90 to-slate-900 border-amber-500/40 shadow-lg shadow-amber-500/5 hover:border-amber-400';
-                case 'cyan':
-                    return 'bg-gradient-to-br from-cyan-950/40 via-slate-900/90 to-slate-900 border-cyan-500/40 shadow-lg shadow-cyan-500/5 hover:border-cyan-400';
-                case 'blue':
-                default:
-                    return 'bg-gradient-to-br from-blue-950/50 via-slate-900/90 to-slate-900 border-blue-500/40 shadow-lg shadow-blue-500/5 hover:border-blue-400';
-            }
-        }
-
-        function getFilteredAspirations() {
-            return aspirations.filter(item => {
-                const matchCategory = activeCategory === 'All' || item.category === activeCategory;
-                const matchSearch = item.text.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                    item.grade.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchCategory && matchSearch;
+        function deleteArticle(id) {
+            openConfirmModal("Apakah Anda yakin ingin menghapus pengumuman ini?", () => {
+                let articles = getStoredArticles();
+                articles = articles.filter(a => a.id !== id);
+                localStorage.setItem('kilas_articles', JSON.stringify(articles));
+                renderArticles();
+                showToast("Berita berhasil dihapus!");
             });
         }
 
-        function filterCategory(cat) {
-            activeCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                if (btn.textContent.includes(cat) || (cat === 'All' && btn.textContent.includes('Semua'))) {
-                    btn.className = "category-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-amber-500 text-slate-950 shadow-md";
-                } else {
-                    btn.className = "category-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-amber-300 transition border border-slate-700";
+        // Render Notes (Bulletin Board)
+        function renderNotes() {
+            const grid = document.getElementById('notesGrid');
+            const empty = document.getElementById('emptyNotesState');
+            const badge = document.getElementById('noteCountBadge');
+            const notes = getStoredNotes();
+            const likedList = getLikedNotes();
+            const admin = isAdminLoggedIn();
+
+            let filtered = notes;
+            if (currentFilter === 'mine') {
+                filtered = notes.filter(n => n.isMine === true);
+            }
+
+            // Filter out flagged posts for public users
+            if (!admin) {
+                filtered = filtered.filter(n => !n.isFlagged);
+            }
+
+            badge.innerText = `${filtered.length} Catatan Tertempel`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            } else {
+                empty.classList.add('hidden');
+            }
+
+            const colorClasses = {
+                yellow: "bg-amber-100/90 border-amber-300 text-amber-950",
+                blue: "bg-sky-100/90 border-sky-300 text-sky-950",
+                green: "bg-emerald-100/90 border-emerald-300 text-emerald-950",
+                pink: "bg-rose-100/90 border-rose-300 text-rose-950"
+            };
+
+            const pinColors = {
+                yellow: "bg-red-500",
+                blue: "bg-amber-500",
+                green: "bg-blue-500",
+                pink: "bg-purple-500"
+            };
+
+            grid.innerHTML = filtered.map(note => {
+                const isLiked = likedList.includes(note.id);
+                const flaggedNotice = note.isFlagged ? `
+                    <div class="mb-2 p-1.5 rounded-lg bg-red-600 text-white text-[10px] font-bold flex items-center justify-between">
+                        <span>🚩 Terindikasi Ujaran Tidak Pantas (Tersembunyi dari Publik)</span>
+                    </div>
+                ` : '';
+
+                return `
+                <div class="relative p-5 rounded-2xl shadow-md border-2 ${colorClasses[note.color] || colorClasses.yellow} ${note.isFlagged ? 'ring-4 ring-rose-500' : ''} transform hover:-translate-y-1 transition duration-200 flex flex-col justify-between min-h-[220px]">
+                    
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full ${pinColors[note.color] || 'bg-red-500'} shadow-md border-2 border-white"></div>
+                    
+                    <div>
+                        ${flaggedNotice}
+                        <div class="flex items-center justify-between mb-3 border-b border-black/10 pb-2">
+                            <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-white/60 border border-black/10 uppercase tracking-wider">
+                                ${escapeHTML(note.category)}
+                            </span>
+                            ${note.isMine ? '<span class="text-[10px] bg-slate-900 text-white font-bold px-2 py-0.5 rounded-full">Milik Saya</span>' : ''}
+                        </div>
+                        <p class="text-sm font-medium leading-relaxed mb-4 whitespace-pre-line">${escapeHTML(note.content)}</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-black/10 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-bold block">${escapeHTML(note.author || 'Anonim')}</span>
+                            <span class="text-[10px] opacity-75">${note.date}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${admin ? `
+                                <button onclick="deleteNote(${note.id})" title="Hapus Aspirasi (Admin)" class="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            ` : ''}
+                            <button onclick="likeNote(${note.id})" ${isLiked ? 'disabled' : ''} class="flex items-center gap-1.5 px-2.5 py-1 rounded-full ${isLiked ? 'bg-rose-500 text-white cursor-not-allowed' : 'bg-white/70 hover:bg-white text-rose-600 border border-black/10'} transition font-bold">
+                                <i class="fa-solid fa-heart"></i>
+                                <span>${note.likes}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Handle Post Submit (With Bad Word Filter)
+        function handlePostSubmit(e) {
+            e.preventDefault();
+            const author = document.getElementById('noteAuthor').value.trim() || "Anonim";
+            const category = document.getElementById('noteCategory').value;
+            const content = document.getElementById('noteContent').value.trim();
+            const colorRadios = document.getElementsByName('noteColor');
+            let selectedColor = 'yellow';
+
+            for (let radio of colorRadios) {
+                if (radio.checked) {
+                    selectedColor = radio.value;
+                    break;
                 }
+            }
+
+            if (!content) return;
+
+            const isBad = containsBadWords(content) || containsBadWords(author);
+
+            const notes = getStoredNotes();
+            const newNote = {
+                id: Date.now(),
+                author: author,
+                category: category,
+                color: selectedColor,
+                content: content,
+                likes: 0,
+                date: "Baru Saja",
+                isMine: true,
+                isFlagged: isBad
+            };
+
+            notes.unshift(newNote);
+            localStorage.setItem('kilas_bulletin_notes', JSON.stringify(notes));
+
+            document.getElementById('noteContent').value = '';
+            document.getElementById('noteAuthor').value = '';
+            closePostModal();
+
+            if (isBad) {
+                showToast("Aspirasi tersimpan tetapi disembunyikan karena mengandung kata tidak pantas!");
+            } else {
+                showToast("Aspirasi berhasil ditempel di Bulletin Board!");
+            }
+            renderNotes();
+        }
+
+        // Single Like Restriction
+        function likeNote(id) {
+            const likedList = getLikedNotes();
+            if (likedList.includes(id)) {
+                showToast("Anda hanya bisa 1x mendukung aspirasi ini!");
+                return;
+            }
+
+            const notes = getStoredNotes();
+            const index = notes.findIndex(n => n.id === id);
+            if (index !== -1) {
+                notes[index].likes += 1;
+                likedList.push(id);
+                localStorage.setItem('kilas_bulletin_notes', JSON.stringify(notes));
+                localStorage.setItem('kilas_liked_notes', JSON.stringify(likedList));
+                renderNotes();
+                showToast("Terima kasih atas dukungan Anda!");
+            }
+        }
+
+        // Admin Delete Note
+        function deleteNote(id) {
+            openConfirmModal("Hapus aspirasi ini dari Bulletin Board secara permanen?", () => {
+                let notes = getStoredNotes();
+                notes = notes.filter(n => n.id !== id);
+                localStorage.setItem('kilas_bulletin_notes', JSON.stringify(notes));
+                renderNotes();
+                showToast("Aspirasi berhasil dihapus!");
             });
-
-            renderView();
         }
 
-        function handleSearch() {
-            searchQuery = document.getElementById('searchInput').value;
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (searchQuery.length > 0) {
-                clearBtn.classList.remove('hidden');
+        function filterNotes(type) {
+            currentFilter = type;
+            const allBtn = document.getElementById('filterAllBtn');
+            const mineBtn = document.getElementById('filterMineBtn');
+
+            if (type === 'all') {
+                allBtn.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs shadow-sm";
+                mineBtn.className = "px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 font-semibold text-xs border border-slate-200";
             } else {
-                clearBtn.classList.add('hidden');
+                mineBtn.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs shadow-sm";
+                allBtn.className = "px-3 py-1.5 rounded-xl bg-white text-slate-700 hover:bg-slate-100 font-semibold text-xs border border-slate-200";
             }
-            renderView();
+
+            renderNotes();
         }
 
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            searchQuery = '';
-            document.getElementById('clearSearchBtn').classList.add('hidden');
-            renderView();
+        // Utility Helper to Prevent XSS
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
         }
 
-        function switchView(mode) {
-            currentView = mode;
-            const btnFloat = document.getElementById('btnFloatingView');
-            const btnGrid = document.getElementById('btnGridView');
-            const containerFloat = document.getElementById('floatingContainer');
-            const bannerFloat = document.getElementById('floatingBanner');
-            const containerGrid = document.getElementById('gridContainer');
+        // Modals Management
+        function openAspirasiModal() {
+            const modal = document.getElementById('aspirasiChoiceModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
 
-            if (mode === 'floating') {
-                btnFloat.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-brand-blue text-white shadow";
-                btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 text-slate-400 hover:text-white transition-all";
-                containerFloat.classList.remove('hidden');
-                bannerFloat.classList.remove('hidden');
-                containerGrid.classList.add('hidden');
-                setupPhysicsCanvas();
+        function closeAspirasiModal() {
+            const modal = document.getElementById('aspirasiChoiceModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function openBulletinBoard() {
+            const modal = document.getElementById('bulletinBoardModal');
+            renderNotes();
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
+
+        function closeBulletinBoard() {
+            const modal = document.getElementById('bulletinBoardModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function openPostModal() {
+            const modal = document.getElementById('postNoteModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
+
+        function closePostModal() {
+            const modal = document.getElementById('postNoteModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function openAboutMPK() {
+            const modal = document.getElementById('aboutMpkModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+            }, 10);
+        }
+
+        function closeAboutMPK() {
+            const modal = document.getElementById('aboutMpkModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function enterHomepage() {
+            const welcome = document.getElementById('welcomeScreen');
+            const main = document.getElementById('mainContent');
+
+            welcome.classList.add('fade-exit');
+            setTimeout(() => {
+                welcome.classList.add('hidden');
+                main.classList.remove('hidden');
+                setTimeout(() => {
+                    main.classList.remove('opacity-0');
+                    main.classList.add('opacity-100');
+                }, 50);
+            }, 600);
+        }
+
+        function showWelcomeScreen() {
+            const welcome = document.getElementById('welcomeScreen');
+            const main = document.getElementById('mainContent');
+
+            main.classList.remove('opacity-100');
+            main.classList.add('opacity-0');
+
+            setTimeout(() => {
+                main.classList.add('hidden');
+                welcome.classList.remove('hidden', 'fade-exit');
+                welcome.classList.add('fade-enter');
+            }, 500);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.getElementById('menuIcon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
             } else {
-                btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-brand-blue text-white shadow";
-                btnFloat.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 text-slate-400 hover:text-white transition-all";
-                containerFloat.classList.add('hidden');
-                bannerFloat.classList.add('hidden');
-                containerGrid.classList.remove('hidden');
-                renderGridView();
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
             }
         }
 
-        function renderView() {
-            if (currentView === 'floating') {
-                setupPhysicsCanvas();
-            } else {
-                renderGridView();
-            }
-            renderStats();
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function renderStats() {
-            document.getElementById('statTotal').textContent = aspirations.length;
-            const topVote = aspirations.reduce((max, item) => (item.upvotes || 1) > max ? (item.upvotes || 1) : max, 0);
-            document.getElementById('statTopVotes').textContent = `${topVote} Dukungan`;
-        }
-
-        function openModal() {
-            const modal = document.getElementById('aspirationModal');
-            const content = document.getElementById('modalContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('aspirationModal');
-            const content = document.getElementById('modalContent');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('aspirationForm').reset();
-            updateCharCount();
-        }
-
-        function updateCharCount() {
-            const text = document.getElementById('inputText').value;
-            document.getElementById('charCounter').textContent = `${text.length}/280`;
-        }
-
-        function showToast(title, message) {
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMessage').textContent = message;
+            const toastMsg = document.getElementById('toastMsg');
 
+            toastMsg.innerText = message;
             toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
 
             setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
                 toast.classList.remove('translate-y-0', 'opacity-100');
-            }, 3500);
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
         }
 
-        function handleResize() {
-            if (currentView === 'floating') {
-                setupPhysicsCanvas();
-            }
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        window.switchView = switchView;
-        window.logoutAdmin = logoutAdmin;
-        window.openAdminModal = openAdminModal;
-        window.closeAdminModal = closeAdminModal;
-        window.handleAdminLogin = handleAdminLogin;
-        window.openModal = openModal;
-        window.closeModal = closeModal;
-        window.filterCategory = filterCategory;
-        window.handleSearch = handleSearch;
-        window.clearSearch = clearSearch;
-        window.updateCharCount = updateCharCount;
-        window.handleFormSubmit = handleFormSubmit;
-        window.upvote = upvote;
-        window.promptDelete = promptDelete;
-        window.closeDeleteModal = closeDeleteModal;
-        window.executeDelete = executeDelete;
-        window.openDetailModal = openDetailModal;
-        window.closeDetailModal = closeDetailModal;
-        window.requestDeleteFromDetail = requestDeleteFromDetail;
-        window.upvoteCurrentDetail = upvoteCurrentDetail;
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAdminUI();
+            renderArticles();
+        });
     </script>
 </body>
 </html>
